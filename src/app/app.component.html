@@ -1,0 +1,35 @@
+<div class="main-container">
+    <header class="header header-6">
+        <div class="branding">
+            <a class="nav-link">
+                <clr-icon shape="wrench" class="is-solid"></clr-icon>
+                <span class="title">Gitlab CE Tools</span>
+            </a>
+        </div>
+        <div class="header-nav">
+            <a class="nav-link nav-text">Projects</a>
+            <a class="nav-link nav-text">Groups</a>
+        </div>
+        <div class="header-actions">
+            <clr-dropdown>
+                <button class="nav-icon" clrDropdownTrigger>
+                    <clr-icon shape="hard-disk"></clr-icon>
+                    <clr-icon shape="caret down"></clr-icon>
+                </button>
+                <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                    <h4 class="dropdown-header">Active server</h4>
+                    <a class="active" clrDropdownItem>Gitlab official</a>
+                    <a clrDropdownItem>Gitlab 2</a>
+                    <a clrDropdownItem>Gitlab 3</a>
+                    <div class="dropdown-divider"></div>
+                    <a clrDropdownItem>Configure new server</a>
+                </clr-dropdown-menu>
+            </clr-dropdown>
+        </div>
+    </header>
+    <div class="content-container">
+        <div class="content-area">
+            ...
+        </div>
+    </div>
+</div>
