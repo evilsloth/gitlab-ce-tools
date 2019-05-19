@@ -27,12 +27,26 @@ export class AppComponent implements OnInit {
         this.modalService.openModal(AddServerModalComponent, { mode: 'ADD' });
     }
 
-    openEditServerModal(serverToEdit: Server) {
-        const data : ServerModalInitData = { mode: 'EDIT', serverToEdit };
+    openEditServerModal(event: Event, serverToEdit: Server) {
+        this.stopEventPropagation(event);
+        const data: ServerModalInitData = { mode: 'EDIT', serverToEdit };
         this.modalService.openModal(AddServerModalComponent, data);
     }
 
-    removeServer(server: Server) {
+    removeServer(event: Event, server: Server) {
+        this.stopEventPropagation(event);
         this.serversService.removeServer(server);
+    }
+
+    selectActiveServer(server: Server) {
+        this.serversService.selectActiveServer(server.name);
+    }
+
+    /**
+     * Prevents event propagation so click is only received by the button and not its container.
+     * @param event event to stop propagation of
+     */
+    private stopEventPropagation(event: Event) {
+        event.stopPropagation();
     }
 }

@@ -7,8 +7,7 @@
             </a>
         </div>
         <div class="header-nav">
-            <a class="nav-link nav-text">Projects</a>
-            <a class="nav-link nav-text">Groups</a>
+            <a class="nav-link nav-text" routerLink="/search" routerLinkActive="active">Search</a>
         </div>
         <div class="header-actions">
             <clr-dropdown>
@@ -19,13 +18,13 @@
                 <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
                     <h4 class="dropdown-header">Active server</h4>
                     <a class="disabled" *ngIf="servers.length === 0" clrDropdownItem>No servers added yet!</a>
-                    <a *ngFor="let server of servers" [class.active]="serversService.isActive(server.name)" clrDropdownItem>
+                    <a *ngFor="let server of servers" [class.active]="serversService.isActive(server.name)" clrDropdownItem (click)="selectActiveServer(server)">
                         {{ server.name }}
                         <div class="dropdown-buttons">
-                            <button type="button" class="dropdown-icon-button" (click)="openEditServerModal(server)">
+                            <button type="button" class="dropdown-icon-button" (click)="openEditServerModal($event, server)">
                                 <clr-icon shape="pencil"></clr-icon>
                             </button>
-                            <button type="button" class="dropdown-icon-button" (click)="removeServer(server)">
+                            <button type="button" class="dropdown-icon-button" (click)="removeServer($event, server)">
                                 <clr-icon shape="trash"></clr-icon>
                             </button>
                         </div>
@@ -38,7 +37,7 @@
     </header>
     <div class="content-container">
         <div class="content-area">
-            ...
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

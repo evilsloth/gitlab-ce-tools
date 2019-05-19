@@ -22,9 +22,10 @@ export class ServersService {
     selectActiveServer(name: string): void {
         this.activeServer = this.findByName(name);
         this.saveActiveNameToStorage();
+        this.reloadPage();
     }
 
-    getActiveServer(name: string): Server {
+    getActiveServer(): Server {
         return this.activeServer;
     }
 
@@ -49,13 +50,15 @@ export class ServersService {
     }
 
     removeServer(serverToRemove: Server) {
+        const index = this.servers.indexOf(serverToRemove);
+        this.servers.splice(index, 1);
+        this.saveListToStorage();
+
         if (this.isActive(serverToRemove.name)) {
             this.activeServer = undefined;
+            this.saveActiveNameToStorage();
+            this.reloadPage();
         }
-
-        const index = this.servers.indexOf(serverToRemove);
-        this.servers = this.servers.splice(index, 1);
-        this.saveListToStorage();
     }
 
     getServers(): Server[] {
@@ -77,7 +80,7 @@ export class ServersService {
     }
 
     private saveListToStorage(): void {
-        localStorage.setItem(ServersService.LIST_STORAGE_KEY, JSON.stringify([...this.servers]));
+        localStorage.setItem(ServersService.LIST_STORAGE_KEY, JSON.stringify(this.servers));
     }
 
     private getActiveNameFromStorage(): string {
@@ -85,6 +88,10 @@ export class ServersService {
     }
 
     private saveActiveNameToStorage(): void {
-        localStorage.setItem(ServersService.SELECTED_STORAGE_KEY, this.activeServer.name);
+        localStorage.setItem(ServersService.SELECTED_STORAGE_KEY, this.activeServer ? this.activeServer.name : undefined);
+    }
+
+    private reloadPage() {
+        window.location.reload();
     }
 }
