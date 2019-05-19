@@ -1,14 +1,35 @@
-<div class="alert alert-danger" role="alert" *ngIf="!server">
-    <div class="alert-items">
-        <div class="alert-item static">
-            <div class="alert-icon-wrapper">
-                <clr-icon class="alert-icon" shape="check-circle"></clr-icon>
-            </div>
-            <span class="alert-text">You must select server first! Use menu in top right corner to select active server.</span>
-        </div>
-    </div>
-</div>
+<app-server-not-selected-alert *ngIf="!server"></app-server-not-selected-alert>
 
 <div *ngIf="server">
-    TODO
+    <form class="clr-form">
+        <div class="clr-row">
+            <clr-select-container class="clr-col-lg-2 clr-col-md-3 clr-col-4">
+                <label for="group" class="clr-control-label">Group</label>
+                <select clrSelect id="group">
+                    <option value="-1" selected>All</option>
+                    <option *ngFor="let group of groups" [value]="group.id">{{group.name}}</option>
+                </select>
+            </clr-select-container>
+            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
+                <label for="searchText" class="clr-control-label">Search text</label>
+                <input type="text" id="searchText" class="clr-input">
+            </div>
+            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
+                <label for="searchText" class="clr-control-label">Search text</label>
+                <input type="text" id="searchText" class="clr-input">
+            </div>
+            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
+                <label for="searchText" class="clr-control-label">Search text</label>
+                <input type="text" id="searchText" class="clr-input">
+            </div>
+        </div>
+        <div class="clr-row search-row">
+            <div class="clr-col-12">
+                <button type="submit" class="btn btn-icon btn-success">
+                    <clr-icon shape="search"></clr-icon>
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

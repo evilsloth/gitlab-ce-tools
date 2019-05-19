@@ -6,16 +6,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServersModule } from './servers/servers.module';
 import { SearchComponent } from './search/search.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ServerNotSelectedAlertComponent } from './common/server-not-selected-alert/server-not-selected-alert.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
         AppComponent,
-        SearchComponent
+        SearchComponent,
+        ServerNotSelectedAlertComponent
     ],
     imports: [
         BrowserAnimationsModule,
         BrowserModule,
         ClarityModule,
+        HttpClientModule,
 
         AppRoutingModule,
         ServersModule
