@@ -1,0 +1,23 @@
+<form [formGroup]="serverForm" (ngSubmit)="save()" clrForm>
+    <clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()">
+        <h3 class="modal-title">Configure server</h3>
+        <div class="modal-body">
+            <clr-input-container>
+                <label>Name</label>
+                <input clrInput type="text" formControlName="name" />
+            </clr-input-container>
+            <clr-input-container>
+                <label>Gitlab URL</label>
+                <input clrInput type="text" formControlName="url" />
+            </clr-input-container>
+            <clr-input-container>
+                <label>Gitlab API token</label>
+                <input clrInput type="text" formControlName="token" />
+            </clr-input-container>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </clr-modal>
+</form>

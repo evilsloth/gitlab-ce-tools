@@ -1,0 +1,19 @@
+.dropdown-icon-button {
+    background: none;
+    border: none;
+    padding: 0 2px;
+    cursor: pointer;
+
+    &:hover {
+        color: #666;
+    }
+}
+
+.dropdown-buttons {
+    margin-left: 20px;
+    float: right;
+
+    > .dropdown-icon-button:not(:last-child) {
+        margin-right: 10px;
+    }
+}
