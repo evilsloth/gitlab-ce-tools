@@ -8,6 +8,7 @@ import { SearchComponent } from './search/search.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ServerNotSelectedAlertComponent } from './common/server-not-selected-alert/server-not-selected-alert.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
         BrowserModule,
         ClarityModule,
         HttpClientModule,
+        ReactiveFormsModule,
 
         AppRoutingModule,
         ServersModule

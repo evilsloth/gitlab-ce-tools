@@ -1,7 +1,23 @@
-.clr-input {
-    width: 100%;
+.search-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        margin-top: 0;
+        margin-bottom: 15px;
+
+
+    }
+
+    > *:not(:last-child) {
+        margin-right: 20px;
+    }
 }
 
-.search-row {
-    padding-top: 12px;
+.progress-bar-container {
+    height: 2em;
+}
+
+.search-results {
+    margin-bottom: 40px;
 }

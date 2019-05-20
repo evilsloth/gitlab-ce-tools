@@ -1,30 +1,24 @@
 <app-server-not-selected-alert *ngIf="!server"></app-server-not-selected-alert>
 
 <div *ngIf="server">
-    <form class="clr-form">
+    <form class="clr-form" [formGroup]="searchForm" (ngSubmit)="search()">
         <div class="clr-row">
-            <clr-select-container class="clr-col-lg-2 clr-col-md-3 clr-col-4">
-                <label for="group" class="clr-control-label">Group</label>
-                <select clrSelect id="group">
-                    <option value="-1" selected>All</option>
-                    <option *ngFor="let group of groups" [value]="group.id">{{group.name}}</option>
-                </select>
-            </clr-select-container>
-            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
-                <label for="searchText" class="clr-control-label">Search text</label>
-                <input type="text" id="searchText" class="clr-input">
-            </div>
-            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
-                <label for="searchText" class="clr-control-label">Search text</label>
-                <input type="text" id="searchText" class="clr-input">
-            </div>
-            <div class="clr-form-control clr-col-lg-2 clr-col-md-3 clr-col-4">
-                <label for="searchText" class="clr-control-label">Search text</label>
-                <input type="text" id="searchText" class="clr-input">
-            </div>
-        </div>
-        <div class="clr-row search-row">
-            <div class="clr-col-12">
+            <div class="clr-col-12 search-controls-row">
+                <clr-select-container>
+                    <label for="group">Group</label>
+                    <select clrSelect id="group" formControlName="group">
+                        <option value="-1" selected>All</option>
+                        <option *ngFor="let group of groups" [value]="group.id">{{group.name}}</option>
+                    </select>
+                </clr-select-container>
+                <clr-input-container>
+                    <label for="projectName">Project name</label>
+                    <input clrInput type="text" id="projectName" formControlName="projectName">
+                </clr-input-container>
+                <clr-input-container>
+                    <label for="searchText">Search text</label>
+                    <input clrInput type="text" id="searchText" formControlName="searchText">
+                </clr-input-container>
                 <button type="submit" class="btn btn-icon btn-success">
                     <clr-icon shape="search"></clr-icon>
                     Search
@@ -32,4 +26,19 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="progress-bar-container">
+    <div class="progress loop" *ngIf="searchInProgress"><progress></progress></div>
+</div>
+
+<div *ngIf="searchResults && searchResults.length > 0" class="search-results">
+    <clr-tree-node *ngFor="let searchResult of searchResults">
+        <clr-icon shape="folder"></clr-icon>
+        {{searchResult.project.name}} [{{searchResult.project.default_branch}}]
+        <clr-tree-node *ngFor="let file of searchResult.fileSearchResults">
+            <clr-icon shape="file"></clr-icon>
+            {{file.filename}}
+        </clr-tree-node>
+    </clr-tree-node>
 </div>
