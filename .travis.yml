@@ -13,7 +13,7 @@ before_script:
 
 script:
     - ng lint
-    - ng build --prod --base-href https://evilsloth.github.io/gitlab-ce-tools/
+    - ng build --prod --base-href https://evilsloth.github.io/gitlab-ce-tools/index.html
 
 deploy:
     provider: pages

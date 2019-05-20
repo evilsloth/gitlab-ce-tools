@@ -34,9 +34,11 @@ export class SearchComponent implements OnInit {
 
     ngOnInit() {
         this.server = this.serversService.getActiveServer();
-        this.groupsApiService.getGroups().subscribe(groups => {
-            this.groups = groups;
-        });
+        if (this.server) {
+            this.groupsApiService.getGroups().subscribe(groups => {
+                this.groups = groups;
+            });
+        }
     }
 
     search() {

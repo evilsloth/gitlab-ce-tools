@@ -35,7 +35,7 @@
 <div *ngIf="searchResults && searchResults.length > 0" class="search-results">
     <clr-tree-node *ngFor="let searchResult of searchResults">
         <clr-icon shape="folder"></clr-icon>
-        {{searchResult.project.name}} [{{searchResult.project.default_branch}}]
+        {{searchResult.project.name_with_namespace}} [{{searchResult.project.default_branch}}]
         <clr-tree-node *ngFor="let file of searchResult.fileSearchResults">
             <clr-icon shape="file"></clr-icon>
             {{file.filename}}
