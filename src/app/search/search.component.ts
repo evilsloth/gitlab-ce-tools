@@ -7,6 +7,10 @@ import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
 import { ProjectSearchResult } from './project-search-result';
 import { Subscription } from 'rxjs';
+import { FileViewerInitData } from '../file-viewer/file-viewer-init-data';
+import { FileViewerComponent } from '../file-viewer/file-viewer.component';
+import { ModalService } from '../common/modal/modal.service';
+import { Project } from '../gitlab-api/models/project';
 
 @Component({
     selector: 'app-search',
@@ -29,7 +33,8 @@ export class SearchComponent implements OnInit {
         private serversService: ServersService,
         private groupsApiService: GroupsApiService,
         private searchService: SearchService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private modalService: ModalService
     ) {}
 
     ngOnInit() {
@@ -39,6 +44,11 @@ export class SearchComponent implements OnInit {
                 this.groups = groups;
             });
         }
+    }
+
+    openFile(filename: string, project: Project) {
+        const data: FileViewerInitData = { filename, project };
+        this.modalService.openModal(FileViewerComponent, data);
     }
 
     search() {

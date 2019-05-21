@@ -9,12 +9,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { ServerNotSelectedAlertComponent } from './common/server-not-selected-alert/server-not-selected-alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FileViewerComponent } from './file-viewer/file-viewer.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         SearchComponent,
-        ServerNotSelectedAlertComponent
+        ServerNotSelectedAlertComponent,
+        FileViewerComponent
     ],
     imports: [
         BrowserAnimationsModule,
@@ -27,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         ServersModule
     ],
     providers: [],
+    entryComponents: [FileViewerComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
