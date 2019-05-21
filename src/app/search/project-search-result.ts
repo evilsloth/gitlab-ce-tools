@@ -3,5 +3,5 @@ import { FileSearchResult } from '../gitlab-api/models/file-search-result';
 
 export interface ProjectSearchResult {
     project: Project;
-    fileSearchResults: FileSearchResult[];
+    fileSearchResults: Map<string, FileSearchResult[]>;
 }

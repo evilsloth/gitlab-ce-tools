@@ -59,8 +59,7 @@ export class SearchComponent implements OnInit {
     }
 
     private onResultForProjectReceived(result: ProjectSearchResult) {
-        if (result.fileSearchResults && result.fileSearchResults.length > 0) {
-            // TODO: filter file duplicates
+        if (result.fileSearchResults && result.fileSearchResults.size > 0) {
             this.searchResults.push(result);
         }
     }

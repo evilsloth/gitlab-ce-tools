@@ -5,6 +5,7 @@ import { mergeMap, map } from 'rxjs/operators';
 import { ProjectsApiService } from '../gitlab-api/projects-api.service';
 import { ProjectSearchResult } from './project-search-result';
 import { Project } from '../gitlab-api/models/project';
+import { FileSearchResult } from '../gitlab-api/models/file-search-result';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,21 @@ export class SearchService {
         return this.projectsApiService.searchInProject(project.id, searchText)
             .pipe(map(results => ({
                 project,
-                fileSearchResults: results
+                fileSearchResults: this.groupSearchResultsByFilename(results)
             })));
+    }
+
+    private groupSearchResultsByFilename(fileSearchResults: FileSearchResult[]): Map<string, FileSearchResult[]> {
+        const results = new Map<string, FileSearchResult[]>();
+
+        fileSearchResults.forEach(element => {
+            if (!results.has(element.filename)) {
+                results.set(element.filename, [ element ]);
+            } else {
+                results.get(element.filename).push(element);
+            }
+        });
+
+        return results;
     }
 }
