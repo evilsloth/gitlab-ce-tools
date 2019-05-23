@@ -14,6 +14,6 @@
             </div>
         </div>
 
-        <pre *ngIf="fileLoaded && !error">{{fileContent}}</pre>
+        <pre class="file-view" *ngIf="fileLoaded && !error"><code [innerHTML]="fileContent"></code></pre>
     </div>
 </clr-modal>

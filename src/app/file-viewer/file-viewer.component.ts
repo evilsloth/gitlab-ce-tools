@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Modal } from '../common/modal/modal';
 import { FileViewerInitData } from './file-viewer-init-data';
 import { FilesApiService } from '../gitlab-api/files-api.service';
+import * as Prism from 'prismjs';
 
 @Component({
   selector: 'app-file-viewer',
@@ -23,7 +24,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         this.filename = initData.filename;
         this.filesApiService.getFile(initData.project.id, initData.project.default_branch, initData.filename)
             .subscribe(
-                file => this.fileContent = atob(file.content),
+                file => this.fileContent = Prism.highlight(atob(file.content), Prism.languages.clike, 'clike'),
                 error => { this.error = error; this.fileLoaded = true; },
                 () => this.fileLoaded = true
             );
