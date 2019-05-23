@@ -27,7 +27,7 @@ export class SearchService {
         if (groupId.toString() === SearchService.ALL_GROUPS_SEARCH_ID) {
             return this.projectsApiService.getProjects(projectNameFilterTerm);
         } else {
-            return this.groupsApiService.getProjectsOfGroup(groupId, projectNameFilterTerm);
+            return this.groupsApiService.getProjectsOfGroupDeep(groupId, projectNameFilterTerm);
         }
     }
 

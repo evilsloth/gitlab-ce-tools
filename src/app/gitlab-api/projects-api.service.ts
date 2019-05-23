@@ -16,6 +16,7 @@ export class ProjectsApiService {
         const url = this.baseApiService.getUrl('projects');
         url.searchParams.set('membership', 'true');
         url.searchParams.set('per_page', '100');
+        url.searchParams.set('simple', 'true');
 
         if (projectNameFilterTerm) {
             url.searchParams.set('search', encodeURIComponent(projectNameFilterTerm));
