@@ -17,18 +17,23 @@
                 </button>
                 <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
                     <h4 class="dropdown-header">Active server</h4>
-                    <a class="disabled" *ngIf="servers.length === 0" clrDropdownItem>No servers added yet!</a>
-                    <a *ngFor="let server of servers" [class.active]="serversService.isActive(server.name)" clrDropdownItem (click)="selectActiveServer(server)">
-                        {{ server.name }}
-                        <div class="dropdown-buttons">
-                            <button type="button" class="dropdown-icon-button" (click)="openEditServerModal($event, server)">
-                                <clr-icon shape="pencil"></clr-icon>
-                            </button>
-                            <button type="button" class="dropdown-icon-button" (click)="removeServer($event, server)">
-                                <clr-icon shape="trash"></clr-icon>
-                            </button>
-                        </div>
-                    </a>
+
+                    <ng-container *ngIf="servers$ | async as servers">
+                        <a class="disabled" *ngIf="servers.length === 0" clrDropdownItem>No servers added yet!</a>
+                        <a *ngFor="let server of servers" clrDropdownItem
+                           [class.active]="server.name === (activeServer$ | async)?.name"
+                           (click)="selectActiveServer(server)">
+                            {{ server.name }}
+                            <div class="dropdown-buttons">
+                                <button type="button" class="dropdown-icon-button" (click)="openEditServerModal($event, server)">
+                                    <clr-icon shape="pencil"></clr-icon>
+                                </button>
+                                <button type="button" class="dropdown-icon-button" (click)="removeServer($event, server)">
+                                    <clr-icon shape="trash"></clr-icon>
+                                </button>
+                            </div>
+                        </a>
+                    </ng-container>
                     <div class="dropdown-divider"></div>
                     <a clrDropdownItem (click)="openAddServerModal()">Configure new server</a>
                 </clr-dropdown-menu>

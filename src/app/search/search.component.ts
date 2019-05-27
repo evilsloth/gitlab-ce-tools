@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Server } from 'selenium-webdriver/safari';
 import { ServersService } from '../servers/servers.service';
 import { GroupsApiService } from '../gitlab-api/groups-api.service';
@@ -17,7 +17,7 @@ import { Project } from '../gitlab-api/models/project';
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
     server: Server;
     groups: Group[] = [];
     searchResults: ProjectSearchResult[] = [];
@@ -29,6 +29,8 @@ export class SearchComponent implements OnInit {
         searchText: ['']
     });
 
+    private activeServerSubscription: Subscription;
+
     constructor(
         private serversService: ServersService,
         private groupsApiService: GroupsApiService,
@@ -37,23 +39,30 @@ export class SearchComponent implements OnInit {
         private modalService: ModalService
     ) {}
 
-    ngOnInit() {
-        this.server = this.serversService.getActiveServer();
-        if (this.server) {
-            this.groupsApiService.getGroups().subscribe(groups => {
-                this.groups = groups;
-            });
-        }
+    ngOnInit(): void {
+        this.activeServerSubscription = this.serversService.getActiveServer().subscribe(activeServer => {
+            this.server = activeServer;
+            if (this.server) {
+                this.loadGroups(); // TODO: prevent active server unsubscription on load groups error!!!
+                this.resetSearch();
+            }
+        });
     }
 
-    openFile(filename: string, project: Project) {
+    ngOnDestroy(): void {
+        this.activeServerSubscription.unsubscribe();
+    }
+
+    openFile(filename: string, project: Project): void {
         const data: FileViewerInitData = { filename, project };
         this.modalService.openModal(FileViewerComponent, data);
     }
 
-    search() {
+    search(): void {
         this.searchInProgress = true;
         this.searchResults = [];
+
+        this.cancelSearch();
 
         if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
@@ -68,9 +77,30 @@ export class SearchComponent implements OnInit {
             );
     }
 
-    private onResultForProjectReceived(result: ProjectSearchResult) {
+    private resetSearch(): void {
+        this.searchResults = [];
+        this.cancelSearch();
+        this.searchInProgress = false;
+        this.searchForm.setValue({group: -1, projectName: '', searchText: ''});
+    }
+
+    private loadGroups(): void {
+        this.groups = [];
+        this.groupsApiService.getGroups().subscribe(
+            groups => this.groups = groups,
+            error => error // TODO: handle errors
+        );
+    }
+
+    private onResultForProjectReceived(result: ProjectSearchResult): void {
         if (result.fileSearchResults && result.fileSearchResults.size > 0) {
             this.searchResults.push(result);
+        }
+    }
+
+    private cancelSearch(): void {
+        if (this.searchSubscription) {
+            this.searchSubscription.unsubscribe();
         }
     }
 }
