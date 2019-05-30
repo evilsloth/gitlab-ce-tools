@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Project } from './models/project';
 import { HttpClient } from '@angular/common/http';
 import { FileSearchResult } from './models/file-search-result';
-import { mergePages } from '../common/utils/merge-pages';
+import { mergePages } from '../shared/utils/merge-pages';
 
 @Injectable({
     providedIn: 'root'

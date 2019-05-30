@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject, ViewContainerRef } from '@angular/core';
 import { Server } from './servers/server';
 import { ServersService } from './servers/servers.service';
-import { ModalService } from './common/modal/modal.service';
 import { AddServerModalComponent } from './servers/add-server-modal/add-server-modal.component';
 import { ServerModalInitData } from './servers/add-server-modal/server-modal-init-data';
 import { Observable } from 'rxjs';
+import { ModalService } from './core/services/modal/modal.service';
 
 @Component({
     selector: 'app-root',

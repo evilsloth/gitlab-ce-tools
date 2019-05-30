@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, merge } from 'rxjs';
 import { Group } from './models/group';
 import { Project } from './models/project';
-import { mergePages } from '../common/utils/merge-pages';
 import { map, switchMap } from 'rxjs/operators';
+import { mergePages } from '../shared/utils/merge-pages';
 
 @Injectable({
     providedIn: 'root'

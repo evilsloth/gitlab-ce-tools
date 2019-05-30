@@ -7,10 +7,10 @@ import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
 import { ProjectSearchResult } from './project-search-result';
 import { Subscription } from 'rxjs';
-import { FileViewerInitData } from '../file-viewer/file-viewer-init-data';
-import { FileViewerComponent } from '../file-viewer/file-viewer.component';
-import { ModalService } from '../common/modal/modal.service';
 import { Project } from '../gitlab-api/models/project';
+import { ModalService } from '../core/services/modal/modal.service';
+import { FileViewerInitData } from '../shared/components/file-viewer/file-viewer-init-data';
+import { FileViewerComponent } from '../shared/components/file-viewer/file-viewer.component';
 
 @Component({
     selector: 'app-search',

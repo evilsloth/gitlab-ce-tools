@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Modal } from '../common/modal/modal';
 import { FileViewerInitData } from './file-viewer-init-data';
-import { FilesApiService } from '../gitlab-api/files-api.service';
 import * as Prism from 'prismjs';
+import { Modal } from 'src/app/core/services/modal/modal';
+import { FilesApiService } from 'src/app/gitlab-api/files-api.service';
 
 @Component({
   selector: 'app-file-viewer',
