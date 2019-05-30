@@ -13,12 +13,12 @@
         "e2e": "ng e2e",
         "electron": "ng build --base-href ./ && electron .",
         "electron-pack": "ng build --base-href ./ && electron-builder --dir",
-        "electron-dist": "ng build --base-href ./ && electron-builder -wl"
+        "release": "ng build --base-href ./ && electron-builder"
     },
     "build": {
         "productName": "Gitlab CE Tools",
         "appId": "com.github.gitlab-ce-tools",
-        "artifactName": "gitlab-ce-tools-installer.${ext}",
+        "artifactName": "gitlab-ce-tools.${version}.${ext}",
         "files": [
             "main.js",
             "dist/gitlab-ce-tools/**/*"
