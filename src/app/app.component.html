@@ -40,8 +40,10 @@
             </clr-dropdown>
         </div>
     </header>
+
     <div class="content-container">
         <div class="content-area">
+            <app-alerts [alerts]="alerts$ | async" (closeAlert)="alertsService.removeAlert($event)"></app-alerts>
             <router-outlet></router-outlet>
         </div>
     </div>

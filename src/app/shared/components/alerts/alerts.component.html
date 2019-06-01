@@ -1,0 +1,18 @@
+<div class="alerts" *ngIf="alerts && alerts.length > 0">
+    <div [attr.class]="'alert alert-' + alert.type" role="alert" *ngFor="let alert of alerts">
+        <div class="alert-items">
+            <div class="alert-item static">
+                <div class="alert-icon-wrapper" [ngSwitch]="alert.type">
+                    <clr-icon class="alert-icon" shape="check-circle" *ngSwitchCase="'success'"></clr-icon>
+                    <clr-icon class="alert-icon" shape="info-circle" *ngSwitchCase="'info'"></clr-icon>
+                    <clr-icon class="alert-icon" shape="exclamation-triangle" *ngSwitchCase="'warning'"></clr-icon>
+                    <clr-icon class="alert-icon" shape="exclamation-circle" *ngSwitchCase="'danger'"></clr-icon>
+                </div>
+                <span class="alert-text">{{alert.text}}</span>
+            </div>
+        </div>
+        <button type="button" class="close" aria-label="Close" (click)="onCloseAlert(alert)">
+            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+        </button>
+    </div>
+</div>

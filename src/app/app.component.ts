@@ -5,6 +5,8 @@ import { AddServerModalComponent } from './servers/add-server-modal/add-server-m
 import { ServerModalInitData } from './servers/add-server-modal/server-modal-init-data';
 import { Observable } from 'rxjs';
 import { ModalService } from './core/services/modal/modal.service';
+import { AlertsService } from './core/services/alerts/alerts.service';
+import { Alert } from './core/services/alerts/alert';
 
 @Component({
     selector: 'app-root',
@@ -14,15 +16,19 @@ import { ModalService } from './core/services/modal/modal.service';
 export class AppComponent implements OnInit {
     servers$: Observable<Server[]>;
     activeServer$: Observable<Server>;
+    alerts$: Observable<Alert[]>;
 
-    constructor(public serversService: ServersService, private modalService: ModalService,
-                @Inject(ViewContainerRef) private viewContainerRef: ViewContainerRef) {
-    }
+    constructor(
+        public serversService: ServersService,
+        public alertsService: AlertsService,
+        private modalService: ModalService,
+        @Inject(ViewContainerRef) private viewContainerRef: ViewContainerRef) { }
 
     ngOnInit(): void {
         this.modalService.setModalContainer(this.viewContainerRef);
         this.servers$ = this.serversService.getServers();
         this.activeServer$ = this.serversService.getActiveServer();
+        this.alerts$ = this.alertsService.getAlerts();
     }
 
     openAddServerModal() {
