@@ -5,7 +5,7 @@ import { Observable, merge } from 'rxjs';
 import { Group } from './models/group';
 import { Project } from './models/project';
 import { map, switchMap } from 'rxjs/operators';
-import { mergePages } from '../shared/utils/merge-pages';
+import { mergePages } from 'src/app/shared/utils/merge-pages';
 
 @Injectable({
     providedIn: 'root'

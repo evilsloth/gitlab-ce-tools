@@ -9,6 +9,7 @@
                     <select clrSelect id="group" formControlName="group">
                         <option value="-1" selected>All</option>
                         <option *ngFor="let group of groups" [value]="group.id">{{group.full_name}}</option>
+                        <option value="-2" disabled *ngIf="groupsLoading">Loading...</option>
                     </select>
                 </clr-select-container>
                 <clr-input-container>

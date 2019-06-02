@@ -1,5 +1,5 @@
-import { Project } from '../gitlab-api/models/project';
-import { FileSearchResult } from '../gitlab-api/models/file-search-result';
+import { Project } from '../core/services/gitlab-api/models/project';
+import { FileSearchResult } from '../core/services/gitlab-api/models/file-search-result';
 
 export interface ProjectSearchResult {
     project: Project;

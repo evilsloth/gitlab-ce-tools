@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Server } from 'selenium-webdriver/safari';
 import { ServersService } from '../servers/servers.service';
-import { GroupsApiService } from '../gitlab-api/groups-api.service';
-import { Group } from '../gitlab-api/models/group';
 import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
 import { ProjectSearchResult } from './project-search-result';
 import { Subscription } from 'rxjs';
-import { Project } from '../gitlab-api/models/project';
 import { ModalService } from '../core/services/modal/modal.service';
 import { FileViewerInitData } from '../shared/components/file-viewer/file-viewer-init-data';
 import { FileViewerComponent } from '../shared/components/file-viewer/file-viewer.component';
+import { Group } from '../core/services/gitlab-api/models/group';
+import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service';
+import { Project } from '../core/services/gitlab-api/models/project';
 
 @Component({
     selector: 'app-search',
@@ -20,6 +20,7 @@ import { FileViewerComponent } from '../shared/components/file-viewer/file-viewe
 export class SearchComponent implements OnInit, OnDestroy {
     server: Server;
     groups: Group[] = [];
+    groupsLoading = false;
     searchResults: ProjectSearchResult[] = [];
     searchSubscription: Subscription;
     searchInProgress = false;
@@ -43,7 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.activeServerSubscription = this.serversService.getActiveServer().subscribe(activeServer => {
             this.server = activeServer;
             if (this.server) {
-                this.loadGroups(); // TODO: prevent active server unsubscription on load groups error!!!
+                this.loadGroups();
                 this.resetSearch();
             }
         });
@@ -72,7 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchSubscription = this.searchService.search(terms.group, terms.projectName, terms.searchText)
             .subscribe(
                 searchResult => this.onResultForProjectReceived(searchResult),
-                error => error, // TODO: handle errors
+                error => error,
                 () => this.searchInProgress = false
             );
     }
@@ -85,10 +86,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     private loadGroups(): void {
+        this.groupsLoading = true;
         this.groups = [];
         this.groupsApiService.getGroups().subscribe(
             groups => this.groups = groups,
-            error => error // TODO: handle errors
+            error => this.groupsLoading = false,
+            () => this.groupsLoading = false
         );
     }
 

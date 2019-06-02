@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GroupsApiService } from '../gitlab-api/groups-api.service';
 import { Observable, merge } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { ProjectsApiService } from '../gitlab-api/projects-api.service';
 import { ProjectSearchResult } from './project-search-result';
-import { Project } from '../gitlab-api/models/project';
-import { FileSearchResult } from '../gitlab-api/models/file-search-result';
+import { ProjectsApiService } from '../core/services/gitlab-api/projects-api.service';
+import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service';
+import { Project } from '../core/services/gitlab-api/models/project';
+import { FileSearchResult } from '../core/services/gitlab-api/models/file-search-result';
 
 @Injectable({
     providedIn: 'root'
