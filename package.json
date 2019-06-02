@@ -13,7 +13,7 @@
         "e2e": "ng e2e",
         "electron": "ng build --base-href ./ && electron .",
         "electron-pack": "ng build --base-href ./ && electron-builder --dir",
-        "release": "ng build --base-href ./ && electron-builder"
+        "electron-dist": "ng build --base-href ./ && electron-builder -wl"
     },
     "build": {
         "productName": "Gitlab CE Tools",
@@ -62,6 +62,7 @@
         "codelyzer": "~4.5.0",
         "electron": "^5.0.2",
         "electron-builder": "^20.40.2",
+        "electron-updater": "^4.0.6",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~4.0.0",
