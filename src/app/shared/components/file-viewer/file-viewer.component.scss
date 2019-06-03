@@ -1,9 +1,13 @@
 .file-view {
-    max-height: none;
-    overflow: visible;
+    max-height: 70vh;
     border: none;
 }
 
+.modal-title {
+    word-wrap: break-word;
+    font-size: 0.7rem;
+}
+
 .modal-body {
-    overflow-x: auto;
+    max-height: none;
 }

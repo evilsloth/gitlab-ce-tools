@@ -30,12 +30,12 @@
               "node_modules/@clr/icons/clr-icons.min.css",
               "node_modules/@clr/ui/clr-ui.min.css",
               "node_modules/prismjs/themes/prism.css",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "src/styles.scss"
             ],
             "scripts": [
               "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js",
-              "node_modules/prismjs/prism.js"
+              "node_modules/@clr/icons/clr-icons.min.js"
             ],
             "es5BrowserSupport": true
           },
