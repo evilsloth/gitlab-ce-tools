@@ -39,7 +39,9 @@
         {{searchResult.project.name_with_namespace}} [{{searchResult.project.default_branch}}]
         <clr-tree-node class="clickable" *ngFor="let fileSearchResult of searchResult.fileSearchResults | keyvalue">
             <clr-icon shape="file"></clr-icon>
-            <a class="file-link" (click)="openFile(fileSearchResult.key, searchResult.project)">{{fileSearchResult.key}}</a>
+            <a class="file-link" (click)="openFile(fileSearchResult.key, searchResult.project)">
+                <app-path-text class="file-path" [path]="fileSearchResult.key"></app-path-text>
+            </a>
             <span class="badge badge-success results-count" *ngIf="fileSearchResult.value.length > 1">{{fileSearchResult.value.length}}</span>
         </clr-tree-node>
     </clr-tree-node>

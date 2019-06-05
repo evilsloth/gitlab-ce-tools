@@ -5,14 +5,21 @@ import { FileViewerComponent } from './components/file-viewer/file-viewer.compon
 import { ServerNotSelectedAlertComponent } from './components/server-not-selected-alert/server-not-selected-alert.component';
 import { ClarityModule } from '@clr/angular';
 import { AlertsComponent } from './components/alerts/alerts.component';
+import { PathTextComponent } from './components/path-text/path-text.component';
 
 @NgModule({
     imports: [CommonModule, ClarityModule],
-    declarations: [FileViewerComponent, ServerNotSelectedAlertComponent, AlertsComponent],
+    declarations: [
+        FileViewerComponent,
+        ServerNotSelectedAlertComponent,
+        AlertsComponent,
+        PathTextComponent
+    ],
     exports: [
         FileViewerComponent,
         ServerNotSelectedAlertComponent,
         AlertsComponent,
+        PathTextComponent,
 
         CommonModule,
         ReactiveFormsModule,

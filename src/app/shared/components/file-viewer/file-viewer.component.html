@@ -1,5 +1,7 @@
-<clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()" [clrModalSize]="'xl'">
-    <h3 class="modal-title">{{filename}}</h3>
+<clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()" [clrModalSize]="'xl'" [clrModalStaticBackdrop]="false">
+    <h3 class="modal-title">
+        <app-path-text [path]="filename"></app-path-text>
+    </h3>
     <div class="modal-body">
         <div class="progress loop" *ngIf="!fileLoaded"><progress></progress></div>
 

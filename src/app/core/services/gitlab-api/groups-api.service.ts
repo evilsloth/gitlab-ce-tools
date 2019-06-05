@@ -19,7 +19,6 @@ export class GroupsApiService {
     getGroups(): Observable<Group[]> {
         const url = this.baseApiService.getUrl('groups');
         url.searchParams.set('per_page', '100');
-        url.searchParams.set('order_by', 'path');
         return mergePages(groupsUrl => this.http.get<Group[]>(groupsUrl.href, { observe: 'response' }), url);
     }
 

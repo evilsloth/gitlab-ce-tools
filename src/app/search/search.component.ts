@@ -11,6 +11,7 @@ import { FileViewerComponent } from '../shared/components/file-viewer/file-viewe
 import { Group } from '../core/services/gitlab-api/models/group';
 import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service';
 import { Project } from '../core/services/gitlab-api/models/project';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-search',
@@ -88,11 +89,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     private loadGroups(): void {
         this.groupsLoading = true;
         this.groups = [];
-        this.groupsApiService.getGroups().subscribe(
-            groups => this.groups = groups,
-            error => this.groupsLoading = false,
-            () => this.groupsLoading = false
-        );
+        this.groupsApiService.getGroups()
+            .pipe(map(groups => groups.sort((group1, group2) => group1.full_name.localeCompare(group2.full_name))))
+            .subscribe(
+                groups => this.groups = groups,
+                error => this.groupsLoading = false,
+                () => this.groupsLoading = false
+            );
     }
 
     private onResultForProjectReceived(result: ProjectSearchResult): void {
