@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServersService } from '../servers.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ServerModalInitData } from './server-modal-init-data';
 import { Modal } from 'src/app/core/services/modal/modal';
+import { ClrForm } from '@clr/angular';
 
 @Component({
     selector: 'app-add-server-modal',
@@ -10,11 +11,16 @@ import { Modal } from 'src/app/core/services/modal/modal';
     styleUrls: ['./add-server-modal.component.scss']
 })
 export class AddServerModalComponent extends Modal<ServerModalInitData> implements OnInit {
+    private static readonly URL_PATTERN = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+    @ViewChild(ClrForm) clrForm;
+    setActive = true;
+
     editMode = false;
     serverForm = this.formBuilder.group({
-        name: [''],
-        url: [''],
-        token: ['']
+        name: ['', Validators.required],
+        url: ['', [Validators.required, Validators.pattern(AddServerModalComponent.URL_PATTERN)]],
+        token: ['', Validators.required]
     });
 
     constructor(private serversService: ServersService, private formBuilder: FormBuilder) {
@@ -31,11 +37,20 @@ export class AddServerModalComponent extends Modal<ServerModalInitData> implemen
     }
 
     save() {
+        if (this.serverForm.invalid) {
+            this.clrForm.markAsDirty();
+            return;
+        }
+
         if (this.editMode) {
             // disabled field are not included in form.value!
             this.serversService.editServer(this.serverForm.getRawValue());
         } else {
             this.serversService.addServer(this.serverForm.value);
+
+            if (this.setActive) {
+                this.serversService.selectActiveServer(this.serverForm.value.name);
+            }
         }
         this.close();
     }

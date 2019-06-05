@@ -5,15 +5,24 @@
             <clr-input-container>
                 <label>Name</label>
                 <input clrInput type="text" formControlName="name" size="40" />
+                <clr-control-error>Value is required!</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Gitlab URL</label>
                 <input clrInput type="text" formControlName="url" size="40" />
+                <clr-control-helper>Full Gitlab server URL, e.g. https://gitlab.com/</clr-control-helper>
+                <clr-control-error>Valid URL required, e.g. https://gitlab.com/</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Gitlab API token</label>
                 <input clrInput type="text" formControlName="token" size="40" />
+                <clr-control-error>Value is required!</clr-control-error>
+                <span *ngIf="serverForm.get('token').hasError('required')" class="clr-subtext">Value is required!</span>
             </clr-input-container>
+            <clr-checkbox-wrapper class="set-active-checkbox" *ngIf="!editMode">
+                <input clrCheckbox type="checkbox" [(ngModel)]="setActive" [ngModelOptions]="{standalone: true}" />
+                <label>Set as active</label>
+            </clr-checkbox-wrapper>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
