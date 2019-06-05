@@ -27,7 +27,7 @@ function createWindow() {
 
 app.on('ready', () => {
     createWindow();
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdatesAndNotify().then(console.log);
 });
 
 // on macOS, closing the window doesn't quit the app

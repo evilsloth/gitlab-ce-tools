@@ -12,7 +12,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(catchError((error: any) => {
             if (error instanceof HttpErrorResponse) {
-                this.alertsService.addAlert({type: 'danger', text: 'Service call error: ' + (error.error.message || error.error.error)});
+                console.log(error);
+                this.alertsService.addAlert({
+                    type: 'danger',
+                    text: 'Service call error: ' + (error.error.message || error.error.error || error.statusText)
+                });
             } else {
                 this.alertsService.addAlert({type: 'danger', text: 'Service call error: ' + error});
             }
