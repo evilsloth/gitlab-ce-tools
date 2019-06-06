@@ -12,7 +12,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(catchError((error: any) => {
             if (error instanceof HttpErrorResponse) {
-                console.log(error);
                 this.alertsService.addAlert({
                     type: 'danger',
                     text: 'Service call error: ' + (error.error.message || error.error.error || error.statusText)
