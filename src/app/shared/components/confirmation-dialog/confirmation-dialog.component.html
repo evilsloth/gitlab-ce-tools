@@ -1,0 +1,10 @@
+<clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()">
+    <h3 class="modal-title">{{initData.title}}</h3>
+    <div class="modal-body">
+        <p>{{initData.message}}</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline" type="button" (click)="cancel()">{{initData.declineText || 'Cancel'}}</button>
+        <button class="btn btn-primary" type="button" (click)="ok()">{{initData.declineText || 'OK'}}</button>
+    </div>
+</clr-modal>

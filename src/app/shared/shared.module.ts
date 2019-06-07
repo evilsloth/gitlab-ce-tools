@@ -6,6 +6,7 @@ import { ServerNotSelectedAlertComponent } from './components/server-not-selecte
 import { ClarityModule } from '@clr/angular';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { PathTextComponent } from './components/path-text/path-text.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     imports: [CommonModule, ClarityModule],
@@ -13,7 +14,8 @@ import { PathTextComponent } from './components/path-text/path-text.component';
         FileViewerComponent,
         ServerNotSelectedAlertComponent,
         AlertsComponent,
-        PathTextComponent
+        PathTextComponent,
+        ConfirmationDialogComponent
     ],
     exports: [
         FileViewerComponent,
@@ -26,6 +28,6 @@ import { PathTextComponent } from './components/path-text/path-text.component';
         FormsModule,
         ClarityModule
     ],
-    entryComponents: [FileViewerComponent]
+    entryComponents: [FileViewerComponent, ConfirmationDialogComponent]
 })
 export class SharedModule {}

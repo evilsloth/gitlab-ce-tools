@@ -1,5 +1,7 @@
 import { Injectable, ComponentFactoryResolver, Inject, Type, ViewContainerRef, ComponentRef } from '@angular/core';
 import { Modal } from './modal';
+import { ConfirmationDialogInitData } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog-init-data';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable({
     providedIn: 'root'
@@ -29,5 +31,10 @@ export class ModalService {
         if (index >= 0) {
             this.modalContainer.remove(index);
         }
+    }
+
+    openConfirmationDialog(data: ConfirmationDialogInitData): Promise<void> {
+        const componentRef = this.openModal(ConfirmationDialogComponent, data);
+        return componentRef.instance.answer;
     }
 }

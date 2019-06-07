@@ -43,7 +43,11 @@ export class AppComponent implements OnInit {
 
     removeServer(event: Event, server: Server) {
         this.stopEventPropagation(event);
-        this.serversService.removeServer(server);
+        this.modalService.openConfirmationDialog({
+            title: 'Delete server',
+            message: `Are you sure you want to delete server configuration "${server.name}"?`,
+            confirmText: 'DELETE'
+        }).then(() => this.serversService.removeServer(server), () => {});
     }
 
     selectActiveServer(server: Server) {
