@@ -2,7 +2,7 @@
 
 ## Demo
 
-Newest version (build from the most recent commit on master branch) can be found [HERE](https://evilsloth.github.io/gitlab-ce-tools/).
+Current version (built from the most recent commit on master branch) can be found [HERE](https://evilsloth.github.io/gitlab-ce-tools/).
 
 ## Features
 

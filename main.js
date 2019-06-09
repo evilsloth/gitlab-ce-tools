@@ -110,11 +110,15 @@ autoUpdater.on('update-available', (updateInfo) => {
     dialog.showMessageBox({
         type: 'info',
         title: 'New version found',
-        message: `Current version:${app.getVersion()}\nNew version:${updateInfo.version}\nDo you want to update now?`,
+        message: `Current version: ${app.getVersion()}\nNew version: ${updateInfo.version}\nDo you want to update now?`,
         buttons: ['Yes', 'No']
     }, (buttonIndex) => {
         if (buttonIndex === 0) {
             autoUpdater.downloadUpdate();
+            dialog.showMessageBox({
+                title: 'Downloading updates',
+                message: 'Updates are being downloaded in background. You will be notified when they are ready to install.'
+            });
         }
         else {
             updateMenuItem.enabled = true;
