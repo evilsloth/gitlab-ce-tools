@@ -4,14 +4,21 @@ import { ServersService } from '../servers/servers.service';
 import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
 import { ProjectSearchResult } from './project-search-result';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest, Observable } from 'rxjs';
 import { ModalService } from '../core/services/modal/modal.service';
 import { FileViewerInitData } from '../shared/components/file-viewer/file-viewer-init-data';
 import { FileViewerComponent } from '../shared/components/file-viewer/file-viewer.component';
 import { Group } from '../core/services/gitlab-api/models/group';
 import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service';
-import { Project } from '../core/services/gitlab-api/models/project';
-import { map } from 'rxjs/operators';
+import { map, filter, switchMap, finalize } from 'rxjs/operators';
+import { ProjectsApiService } from '../core/services/gitlab-api/projects-api.service';
+import { FileInProject } from './search-results-list/file-in-project';
+
+enum ProjectsSearchType {
+    ALL = 'ALL',
+    BY_NAME = 'BY_NAME',
+    SELECTED = 'SELECTED'
+}
 
 @Component({
     selector: 'app-search',
@@ -19,27 +26,38 @@ import { map } from 'rxjs/operators';
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnDestroy {
+    private static readonly ALL_GROUPS_ID = '-1';
+    ProjectsSearchType = ProjectsSearchType;
+
     server: Server;
     groups: Group[] = [];
+    projectsInSelectedGroup = [];
     groupsLoading = false;
+    projectsLoading = false;
     searchResults: ProjectSearchResult[] = [];
     searchSubscription: Subscription;
     searchInProgress = false;
     searchForm = this.formBuilder.group({
-        group: [-1],
+        group: [SearchComponent.ALL_GROUPS_ID],
+        projectsSearchType: [ProjectsSearchType.ALL],
         projectName: [''],
+        projects: [[]],
         searchText: ['']
     });
 
     private activeServerSubscription: Subscription;
+    private projectsSearchTypeSubscription: Subscription;
 
     constructor(
         private serversService: ServersService,
         private groupsApiService: GroupsApiService,
+        private projectsApiService: ProjectsApiService,
         private searchService: SearchService,
         private formBuilder: FormBuilder,
         private modalService: ModalService
-    ) {}
+    ) {
+        this.projectsSearchTypeSubscription = this.subscribeToProjectsToSearch();
+    }
 
     ngOnInit(): void {
         this.activeServerSubscription = this.serversService.getActiveServer().subscribe(activeServer => {
@@ -53,10 +71,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.activeServerSubscription.unsubscribe();
+        this.projectsSearchTypeSubscription.unsubscribe();
     }
 
-    openFile(filename: string, project: Project): void {
-        const data: FileViewerInitData = { filename, project };
+    openFile(fileInProject: FileInProject): void {
+        const data: FileViewerInitData = { ...fileInProject };
         this.modalService.openModal(FileViewerComponent, data);
     }
 
@@ -70,20 +89,61 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.searchSubscription.unsubscribe();
         }
 
+        this.searchSubscription = this.makeSearch().subscribe(
+            searchResult => this.onResultForProjectReceived(searchResult),
+            error => error,
+            () => this.searchInProgress = false
+        );
+    }
+
+    private subscribeToProjectsToSearch() {
+        return combineLatest(
+            this.searchForm.controls.projectsSearchType.valueChanges,
+            this.searchForm.controls.group.valueChanges
+        ).pipe(
+            filter(([type]) => type === ProjectsSearchType.SELECTED),
+            switchMap(([type, group]) => {
+                this.searchForm.patchValue({projects: []});
+                this.projectsInSelectedGroup = [];
+                this.projectsLoading = true;
+                return this.getProjectsOfGroup(group).pipe(finalize(() => this.projectsLoading = false));
+            })
+        ).subscribe(
+            (projects) => this.projectsInSelectedGroup = this.projectsInSelectedGroup.concat(projects),
+            (error) => this.projectsLoading = false
+        );
+    }
+
+    private makeSearch(): Observable<ProjectSearchResult> {
         const terms = this.searchForm.value;
-        this.searchSubscription = this.searchService.search(terms.group, terms.projectName, terms.searchText)
-            .subscribe(
-                searchResult => this.onResultForProjectReceived(searchResult),
-                error => error,
-                () => this.searchInProgress = false
-            );
+        if (terms.projectsSearchType === ProjectsSearchType.ALL) {
+            return this.searchService.searchInGroup(terms.group, undefined, terms.searchText);
+        } else if (terms.projectsSearchType === ProjectsSearchType.SELECTED) {
+            return this.searchService.searchInProjects(terms.projects, terms.searchText);
+        } else {
+            return this.searchService.searchInGroup(terms.group, terms.projectName, terms.searchText);
+        }
+    }
+
+    private getProjectsOfGroup(groupId: string) {
+        if (groupId === SearchComponent.ALL_GROUPS_ID) {
+            return this.projectsApiService.getProjects();
+        } else {
+            return this.groupsApiService.getProjectsOfGroupDeep(groupId);
+        }
     }
 
     private resetSearch(): void {
         this.searchResults = [];
         this.cancelSearch();
         this.searchInProgress = false;
-        this.searchForm.setValue({group: -1, projectName: '', searchText: ''});
+        this.searchForm.setValue({
+            group: SearchComponent.ALL_GROUPS_ID,
+            projectsSearchType: ProjectsSearchType.ALL,
+            projectName: '',
+            projects: [],
+            searchText: ''
+        });
     }
 
     private loadGroups(): void {

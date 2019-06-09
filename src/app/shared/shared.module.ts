@@ -7,6 +7,7 @@ import { ClarityModule } from '@clr/angular';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { PathTextComponent } from './components/path-text/path-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     imports: [CommonModule, ClarityModule],
@@ -26,7 +27,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        ClarityModule
+        ClarityModule,
+        NgSelectModule
     ],
     entryComponents: [FileViewerComponent, ConfirmationDialogComponent]
 })

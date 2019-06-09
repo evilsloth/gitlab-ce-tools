@@ -15,12 +15,16 @@ export class SearchService {
 
     constructor(private groupsApiService: GroupsApiService, private projectsApiService: ProjectsApiService) {}
 
-    search(groupId: number, projectNameFilterTerm?: string, searchText?: string): Observable<ProjectSearchResult> {
+    searchInGroup(groupId: string|number, projectNameFilterTerm?: string, searchText?: string): Observable<ProjectSearchResult> {
         return this.searchProjects(groupId, projectNameFilterTerm)
             .pipe(mergeMap(projects => {
                 const projectsSearch$ = projects.map(project => this.searchInProject(project, searchText));
                 return merge(...projectsSearch$);
             }));
+    }
+
+    searchInProjects(projects: Array<Project>, searchText?: string): Observable<ProjectSearchResult> {
+        return merge(...projects.map(project => this.searchInProject(project, searchText)));
     }
 
     private searchProjects(groupId: string|number, projectNameFilterTerm?: string) {
