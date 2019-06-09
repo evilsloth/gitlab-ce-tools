@@ -18,21 +18,27 @@
     height: 2em;
 }
 
-.search-results {
-    margin-bottom: 40px;
+.projects-select {
+    width: 350px;
 }
 
-.results-count {
-    margin-left: 5px;
-}
+.project-item {
+    display: flex;
+    flex-direction: column;
+    min-height: 3em;
+    justify-content: center;
 
-.file-link {
-    cursor: pointer;
-}
+    > .project-name {
+        line-height: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-.file-path {
-    line-height: 1.4em;
-    display: inline-block;
-    font-size: 0.9em;
-    text-decoration: inherit;
+    > .project-group {
+        line-height: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.75em;
+        opacity: 0.7;
+    }
 }

@@ -12,9 +12,35 @@
                         <option value="-2" disabled *ngIf="groupsLoading">Loading...</option>
                     </select>
                 </clr-select-container>
-                <clr-input-container>
-                    <label for="projectName">Project name</label>
-                    <input clrInput type="text" id="projectName" formControlName="projectName" size="30">
+                <clr-select-container>
+                    <label>Filter projects</label>
+                    <select clrSelect name="options" formControlName="projectsSearchType">
+                        <option [value]="ProjectsSearchType.ALL">All</option>
+                        <option [value]="ProjectsSearchType.BY_NAME">Search by name</option>
+                        <option [value]="ProjectsSearchType.SELECTED">Selected only</option>
+                    </select>
+                </clr-select-container>
+                <clr-input-container *ngIf="searchForm.value.projectsSearchType === 'BY_NAME'">
+                    <label for="searchText">Project name</label>
+                    <input clrInput type="text" formControlName="projectName" size="30">
+                </clr-input-container>
+                <clr-input-container *ngIf="searchForm.value.projectsSearchType === 'SELECTED'">
+                    <label>Select projects</label>
+                    <ng-select class="projects-select"
+                               clrInput
+                               [items]="projectsInSelectedGroup"
+                               [loading]="projectsLoading"
+                               bindLabel="name"
+                               [multiple]="true"
+                               [closeOnSelect]="false"
+                               formControlName="projects">
+                        <ng-template ng-option-tmp let-item="item" class="test">
+                            <div class="project-item">
+                                <div class="project-name">{{item.name}}</div>
+                                <div class="project-group">{{item.namespace.full_path}}</div>
+                            </div>
+                        </ng-template>
+                    </ng-select>
                 </clr-input-container>
                 <clr-input-container>
                     <label for="searchText">Search text</label>
@@ -33,16 +59,4 @@
     <div class="progress loop" *ngIf="searchInProgress"><progress></progress></div>
 </div>
 
-<div *ngIf="searchResults && searchResults.length > 0" class="search-results">
-    <clr-tree-node *ngFor="let searchResult of searchResults">
-        <clr-icon shape="folder"></clr-icon>
-        {{searchResult.project.name_with_namespace}} [{{searchResult.project.default_branch}}]
-        <clr-tree-node class="clickable" *ngFor="let fileSearchResult of searchResult.fileSearchResults | keyvalue">
-            <clr-icon shape="file"></clr-icon>
-            <a class="file-link" (click)="openFile(fileSearchResult.key, searchResult.project)">
-                <app-path-text class="file-path" [path]="fileSearchResult.key"></app-path-text>
-            </a>
-            <span class="badge badge-success results-count" *ngIf="fileSearchResult.value.length > 1">{{fileSearchResult.value.length}}</span>
-        </clr-tree-node>
-    </clr-tree-node>
-</div>
+<app-search-results-list [searchResults]="searchResults" (fileSelected)="openFile($event)"></app-search-results-list>
