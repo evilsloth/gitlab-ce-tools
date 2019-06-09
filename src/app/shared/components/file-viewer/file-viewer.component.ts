@@ -17,7 +17,7 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers';
   styleUrls: ['./file-viewer.component.scss']
 })
 export class FileViewerComponent extends Modal<FileViewerInitData> implements OnInit {
-    private static readonly SUPPORTED_LANGS = ['js', 'ts', 'java', 'html', 'md', 'json', 'scss', 'xml'];
+    private static readonly SUPPORTED_LANGS = ['js', 'ts', 'java', 'html', 'md', 'json', 'scss', 'xml', 'css'];
 
     filename: string;
     fileContent: string;
