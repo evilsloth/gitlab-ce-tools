@@ -5,7 +5,5 @@ export interface Project {
     archived: boolean; // TODO: Add filter?
     name: string;
     name_with_namespace: string;
-    namespace: {
-        full_path: string;
-    };
+    path_with_namespace: string;
 }

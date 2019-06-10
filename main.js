@@ -9,6 +9,10 @@ let win;
 let menu;
 let updateMenuItem;
 
+const UPDATE_RUN_ON_STARTUP = 1;
+const UPDATE_RUN_FROM_MENU = 2;
+let updateRunFrom;
+
 function buildMenu() {
     let menu = Menu.buildFromTemplate([
         {
@@ -44,6 +48,7 @@ function buildMenu() {
                     click(menuItem) {
                         updateMenuItem = menuItem;
                         updateMenuItem.enabled = false;
+                        updateRunFrom = UPDATE_RUN_FROM_MENU;
                         autoUpdater.checkForUpdates();
                     }
                 },
@@ -83,10 +88,11 @@ app.on('ready', () => {
     autoUpdater.autoDownload = false
     autoUpdater.logger = log;
     autoUpdater.logger.transports.file.level = 'info';
-    if (app.isPacked) {
-        autoUpdater.checkForUpdates();
+    if (app.isPackaged) {
+        updateRunFrom = UPDATE_RUN_ON_STARTUP;
         updateMenuItem = menu.getMenuItemById(UPDATE_MENU_ITEM_ID);
         updateMenuItem.enabled = false;
+        autoUpdater.checkForUpdates();
     }
 });
 
@@ -128,12 +134,15 @@ autoUpdater.on('update-available', (updateInfo) => {
 });
 
 autoUpdater.on('update-not-available', () => {
-    dialog.showMessageBox({
-        title: 'No updates found',
-        message: 'Current version is up to date.'
-    });
     updateMenuItem.enabled = true;
     updateMenuItem = null;
+
+    if (updateRunFrom !== UPDATE_RUN_ON_STARTUP) {
+        dialog.showMessageBox({
+            title: 'No updates found',
+            message: 'Current version is up to date.'
+        });
+    }
 });
 
 autoUpdater.on('update-downloaded', () => {
@@ -146,5 +155,10 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 autoUpdater.on('error', (error) => {
-    dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString());
+    updateMenuItem.enabled = true;
+    updateMenuItem = null;
+
+    if (updateRunFrom !== UPDATE_RUN_ON_STARTUP) {
+        dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString());
+    }
 });
