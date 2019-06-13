@@ -9,6 +9,7 @@ import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-markdown';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-scss';
+import 'prismjs/plugins/line-highlight/prism-line-highlight';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 @Component({
@@ -22,6 +23,8 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     filename: string;
     fileContent: string;
     highlightLanguage: string;
+    linesToHighlight: string;
+    textToHighlight: string;
     fileLoaded = false;
     error: any;
 
@@ -35,11 +38,13 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     ngOnInit(): void {
         const initData = this.getData();
         this.filename = initData.filename;
+        this.textToHighlight = initData.textToHighlight;
         this.filesApiService.getFile(initData.project.id, initData.project.default_branch, initData.filename)
             .subscribe(
                 file => {
                     this.fileContent = atob(file.content);
                     this.highlightLanguage = this.getHightlightLanguage(file.file_name);
+                    this.linesToHighlight = this.getLinesToHighlight();
                     this.highlightCode();
                 },
                 error => { this.error = error; this.fileLoaded = true; }
@@ -62,5 +67,29 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         }
 
         return 'clike';
+    }
+
+    private getLinesToHighlight(): string {
+        if (!this.textToHighlight) {
+            return '';
+        }
+
+        const foundInLines: number[] = [];
+        const searchRegex = new RegExp(this.regexEscape(this.textToHighlight), 'gi');
+        const lines = this.fileContent.split('\n');
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            if (searchRegex.test(line)) {
+                foundInLines.push(i + 1);
+            }
+        }
+
+        return foundInLines.toString();
+    }
+
+    private regexEscape(str: string) {
+        return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 }

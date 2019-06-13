@@ -30,6 +30,7 @@
               "node_modules/@clr/icons/clr-icons.min.css",
               "node_modules/@clr/ui/clr-ui.min.css",
               "node_modules/prismjs/themes/prism.css",
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "src/styles.scss"
             ],

@@ -19,7 +19,7 @@ export class ProjectsApiService {
         url.searchParams.set('simple', 'true');
 
         if (projectNameFilterTerm) {
-            url.searchParams.set('search', encodeURIComponent(projectNameFilterTerm));
+            url.searchParams.set('search', projectNameFilterTerm);
         }
 
         return mergePages(projectsUrl => this.http.get<Project[]>(projectsUrl.href, { observe: 'response' }), url);
@@ -29,7 +29,7 @@ export class ProjectsApiService {
         const url = this.baseApiService.getUrl(`projects/${projectId}/search`);
         url.searchParams.set('scope', 'blobs');
         url.searchParams.set('per_page', '100');
-        url.searchParams.set('search', encodeURIComponent(searchText));
+        url.searchParams.set('search', searchText);
 
         return mergePages(searchUrl => this.http.get<FileSearchResult[]>(searchUrl.href, { observe: 'response' }), url);
     }

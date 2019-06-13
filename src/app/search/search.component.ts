@@ -13,11 +13,20 @@ import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service
 import { map, filter, switchMap, finalize } from 'rxjs/operators';
 import { ProjectsApiService } from '../core/services/gitlab-api/projects-api.service';
 import { FileInProject } from './search-results-list/file-in-project';
+import { Project } from '../core/services/gitlab-api/models/project';
 
 enum ProjectsSearchType {
     ALL = 'ALL',
     BY_NAME = 'BY_NAME',
     SELECTED = 'SELECTED'
+}
+
+interface SearchTerms {
+    group: string;
+    projectsSearchType: ProjectsSearchType;
+    projectName: string;
+    projects: Project[];
+    searchText: string;
 }
 
 @Component({
@@ -34,6 +43,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     projectsInSelectedGroup = [];
     groupsLoading = false;
     projectsLoading = false;
+    searchTerms: SearchTerms;
     searchResults: ProjectSearchResult[] = [];
     searchSubscription: Subscription;
     searchInProgress = false;
@@ -75,7 +85,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     openFile(fileInProject: FileInProject): void {
-        const data: FileViewerInitData = { ...fileInProject };
+        const data: FileViewerInitData = { ...fileInProject, textToHighlight: this.searchTerms.searchText };
         this.modalService.openModal(FileViewerComponent, data);
     }
 
@@ -89,7 +99,8 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.searchSubscription.unsubscribe();
         }
 
-        this.searchSubscription = this.makeSearch().subscribe(
+        this.searchTerms = this.searchForm.value;
+        this.searchSubscription = this.makeSearch(this.searchTerms).subscribe(
             searchResult => this.onResultForProjectReceived(searchResult),
             error => error,
             () => this.searchInProgress = false
@@ -114,8 +125,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         );
     }
 
-    private makeSearch(): Observable<ProjectSearchResult> {
-        const terms = this.searchForm.value;
+    private makeSearch(terms: SearchTerms): Observable<ProjectSearchResult> {
         if (terms.projectsSearchType === ProjectsSearchType.ALL) {
             return this.searchService.searchInGroup(terms.group, undefined, terms.searchText);
         } else if (terms.projectsSearchType === ProjectsSearchType.SELECTED) {

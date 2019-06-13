@@ -45,7 +45,7 @@ export class GroupsApiService {
         url.searchParams.set('simple', 'true');
 
         if (projectNameFilterTerm) {
-            url.searchParams.set('search', encodeURIComponent(projectNameFilterTerm));
+            url.searchParams.set('search', projectNameFilterTerm);
         }
 
         return mergePages(projectsUrl => this.http.get<Project[]>(projectsUrl.href, { observe: 'response' }), url);
