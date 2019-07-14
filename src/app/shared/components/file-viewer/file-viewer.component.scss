@@ -1,13 +1,26 @@
-.file-view {
-    max-height: 70vh;
-    border: none;
-}
-
 .modal-title {
     word-wrap: break-word;
     font-size: 0.7rem;
 }
 
 .modal-body {
-    max-height: none;
+    height: 70vh;
+}
+
+.ace {
+    border: 1px solid #e3e3e3;
+}
+
+ace::ng-deep {
+    .lineMarker {
+        position: absolute;
+        background: rgba(176, 255, 176, 0.3);
+        z-index: 20;
+    }
+
+    .wordMarker {
+        position: absolute;
+        background: rgba(255, 255, 0, 0.5);
+        z-index: 21;
+    }
 }

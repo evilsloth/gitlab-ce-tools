@@ -16,7 +16,6 @@
             </div>
         </div>
 
-        <pre class="file-view line-numbers"
-             [attr.data-line]="linesToHighlight"><code #codeContainer [ngClass]="'language-' + highlightLanguage">{{fileContent}}</code></pre>
+        <ace #ace [hidden]="!fileLoaded" [mode]="highlightLanguage" [theme]="'chrome'" [value]="fileContent" [disabled]="true"></ace>
     </div>
 </clr-modal>

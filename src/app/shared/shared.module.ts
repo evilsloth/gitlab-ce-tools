@@ -8,9 +8,17 @@ import { AlertsComponent } from './components/alerts/alerts.component';
 import { PathTextComponent } from './components/path-text/path-text.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AceModule } from 'ngx-ace-wrapper';
+import { ACE_CONFIG } from 'ngx-ace-wrapper';
+import { AceConfigInterface } from 'ngx-ace-wrapper';
+
+const DEFAULT_ACE_CONFIG: AceConfigInterface = {
+    showPrintMargin: false,
+    fontSize: 14
+};
 
 @NgModule({
-    imports: [CommonModule, ClarityModule],
+    imports: [CommonModule, ClarityModule, AceModule],
     declarations: [
         FileViewerComponent,
         ServerNotSelectedAlertComponent,
@@ -30,6 +38,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
         ClarityModule,
         NgSelectModule
     ],
+    providers: [
+        {
+            provide: ACE_CONFIG,
+            useValue: DEFAULT_ACE_CONFIG
+        }
+    ],
     entryComponents: [FileViewerComponent, ConfirmationDialogComponent]
 })
-export class SharedModule {}
+export class SharedModule { }
