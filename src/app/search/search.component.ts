@@ -26,6 +26,7 @@ interface SearchTerms {
     projectsSearchType: ProjectsSearchType;
     projectName: string;
     projects: Project[];
+    searchFilename: string;
     searchText: string;
 }
 
@@ -52,6 +53,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         projectsSearchType: [ProjectsSearchType.ALL],
         projectName: [''],
         projects: [[]],
+        searchFilename: [''],
         searchText: ['']
     });
 
@@ -108,10 +110,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     private subscribeToProjectsToSearch() {
-        return combineLatest(
+        return combineLatest([
             this.searchForm.controls.projectsSearchType.valueChanges,
             this.searchForm.controls.group.valueChanges
-        ).pipe(
+        ]).pipe(
             filter(([type]) => type === ProjectsSearchType.SELECTED),
             switchMap(([type, group]) => {
                 this.searchForm.patchValue({projects: []});
@@ -127,11 +129,11 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     private makeSearch(terms: SearchTerms): Observable<ProjectSearchResult> {
         if (terms.projectsSearchType === ProjectsSearchType.ALL) {
-            return this.searchService.searchInGroup(terms.group, undefined, terms.searchText);
+            return this.searchService.searchInGroup(terms.group, undefined, terms.searchText, terms.searchFilename);
         } else if (terms.projectsSearchType === ProjectsSearchType.SELECTED) {
-            return this.searchService.searchInProjects(terms.projects, terms.searchText);
+            return this.searchService.searchInProjects(terms.projects, terms.searchText, terms.searchFilename);
         } else {
-            return this.searchService.searchInGroup(terms.group, terms.projectName, terms.searchText);
+            return this.searchService.searchInGroup(terms.group, terms.projectName, terms.searchText, terms.searchFilename);
         }
     }
 
@@ -152,6 +154,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             projectsSearchType: ProjectsSearchType.ALL,
             projectName: '',
             projects: [],
+            searchFilename: '',
             searchText: ''
         });
     }

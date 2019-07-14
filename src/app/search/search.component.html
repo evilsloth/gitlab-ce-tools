@@ -43,8 +43,13 @@
                     </ng-select>
                 </clr-input-container>
                 <clr-input-container>
+                    <label for="searchText">Filename</label>
+                    <input clrInput type="text" id="filename" formControlName="searchFilename" size="25">
+                    <clr-control-helper>Use * as a wildcard, e.g. *.java, MyFile.*</clr-control-helper>
+                </clr-input-container>
+                <clr-input-container>
                     <label for="searchText">Search text</label>
-                    <input clrInput type="text" id="searchText" formControlName="searchText" size="40">
+                    <input clrInput type="text" id="searchText" formControlName="searchText" size="35">
                 </clr-input-container>
                 <button type="submit" class="btn btn-icon btn-success">
                     <clr-icon shape="search"></clr-icon>
