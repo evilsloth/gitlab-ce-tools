@@ -13,7 +13,7 @@ import { ClrForm } from '@clr/angular';
 export class AddServerModalComponent extends Modal<ServerModalInitData> implements OnInit {
     private static readonly URL_PATTERN = /^https?:\/\/[^\s]+$/;
 
-    @ViewChild(ClrForm) clrForm;
+    @ViewChild(ClrForm, { static: true }) clrForm;
     setActive = true;
 
     editMode = false;

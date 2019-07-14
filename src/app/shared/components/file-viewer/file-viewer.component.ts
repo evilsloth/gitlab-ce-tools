@@ -42,7 +42,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         ['properties', 'properties']
     ]);
 
-    @ViewChild('ace')
+    @ViewChild('ace', { static: true })
     ace: AceComponent;
 
     project: Project;
@@ -52,9 +52,6 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     textToHighlight: string;
     fileLoaded = false;
     error: any;
-
-    @ViewChild('codeContainer')
-    codeContainer: ElementRef;
 
     constructor(private filesApiService: FilesApiService) {
         super();
