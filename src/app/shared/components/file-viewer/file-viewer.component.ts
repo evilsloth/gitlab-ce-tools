@@ -1,8 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostBinding } from '@angular/core';
 import { FileViewerInitData } from './file-viewer-init-data';
 import { Modal } from 'src/app/core/services/modal/modal';
 import { FilesApiService } from 'src/app/core/services/gitlab-api/files-api.service';
-import { AceComponent } from 'ngx-ace-wrapper';
+import { AceComponent, AceConfigInterface } from 'ngx-ace-wrapper';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 
 import 'brace';
@@ -20,6 +20,7 @@ import 'brace/mode/properties';
 import 'brace/mode/text';
 import 'brace/theme/chrome';
 import 'brace/ext/searchbox';
+import { SettingsService } from 'src/app/settings/settings.service';
 
 @Component({
   selector: 'app-file-viewer',
@@ -44,6 +45,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
 
     @ViewChild('ace', { static: true })
     ace: AceComponent;
+    aceConfig: AceConfigInterface;
 
     project: Project;
     filename: string;
@@ -53,15 +55,24 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     fileLoaded = false;
     error: any;
 
-    constructor(private filesApiService: FilesApiService) {
+    @HostBinding('class.fullscreen')
+    fullScreen = false;
+
+    constructor(private filesApiService: FilesApiService, private settingsService: SettingsService) {
         super();
     }
 
     ngOnInit(): void {
+        const settings = this.settingsService.getCurrentSettings();
         const initData = this.getData();
         this.project = initData.project;
         this.filename = initData.filename;
         this.textToHighlight = initData.textToHighlight;
+        this.fullScreen = settings.fileViewer.fullScreen;
+
+        this.aceConfig = {
+            wrap: settings.fileViewer.wrapLines
+        };
     }
 
     ngAfterViewInit(): void {

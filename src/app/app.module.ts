@@ -8,6 +8,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { HttpErrorInterceptor } from './core/services/http/http-error-interceptor';
 import { SearchModule } from './search/search.module';
+import { SettingsModule } from './settings/settings.module';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { SearchModule } from './search/search.module';
         SharedModule,
         AppRoutingModule,
         ServersModule,
-        SearchModule
+        SearchModule,
+        SettingsModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }

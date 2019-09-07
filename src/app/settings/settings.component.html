@@ -1,0 +1,22 @@
+<form [formGroup]="settingsForm" (ngSubmit)="save()" clrForm>
+    <clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()">
+        <h3 class="modal-title">Settings</h3>
+        <div class="modal-body">
+            <div formGroupName="fileViewer">
+                <div class="setting-section-title">File viewer</div>
+                <clr-checkbox-wrapper>
+                    <input clrCheckbox type="checkbox" formControlName="fullScreen" />
+                    <label>Full screen window</label>
+                </clr-checkbox-wrapper>
+                <clr-checkbox-wrapper>
+                    <input clrCheckbox type="checkbox" formControlName="wrapLines" />
+                    <label>Wrap long lines</label>
+                </clr-checkbox-wrapper>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </clr-modal>
+</form>

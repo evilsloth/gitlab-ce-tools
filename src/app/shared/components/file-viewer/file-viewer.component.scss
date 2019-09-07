@@ -24,3 +24,29 @@ ace::ng-deep {
         z-index: 21;
     }
 }
+
+:host(.fullscreen) {
+    .modal-body {
+        height: 100%;
+        max-height: none;
+    }
+
+    ::ng-deep {
+        .modal-dialog {
+            width: 100%;
+        }
+
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-dialog, .modal-content-wrapper, .modal-content {
+            height: 100%;
+        }
+
+        .modal {
+            padding: 0;
+        }
+    }
+}

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { ModalService } from './core/services/modal/modal.service';
 import { AlertsService } from './core/services/alerts/alerts.service';
 import { Alert } from './core/services/alerts/alert';
+import { SettingsComponent } from './settings/settings.component';
 
 @Component({
     selector: 'app-root',
@@ -52,6 +53,10 @@ export class AppComponent implements OnInit {
 
     selectActiveServer(server: Server) {
         this.serversService.selectActiveServer(server.name);
+    }
+
+    openSettingsModal() {
+        this.modalService.openModal(SettingsComponent);
     }
 
     /**

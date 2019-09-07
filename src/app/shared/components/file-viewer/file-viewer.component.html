@@ -16,6 +16,7 @@
             </div>
         </div>
 
-        <ace #ace [hidden]="!fileLoaded" [mode]="highlightLanguage" [theme]="'chrome'" [value]="fileContent" [disabled]="true"></ace>
+        <ace #ace [hidden]="!fileLoaded" [mode]="highlightLanguage" [theme]="'chrome'" [value]="fileContent"
+                  [disabled]="true" [config]="aceConfig"></ace>
     </div>
 </clr-modal>
