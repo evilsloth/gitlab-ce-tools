@@ -39,6 +39,7 @@ ace::ng-deep {
         .modal-content {
             display: flex;
             flex-direction: column;
+            border-radius: 0;
         }
 
         .modal-dialog, .modal-content-wrapper, .modal-content {

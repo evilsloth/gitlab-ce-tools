@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Server } from 'selenium-webdriver/safari';
 import { ServersService } from '../servers/servers.service';
 import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
@@ -14,6 +13,8 @@ import { map, filter, switchMap, finalize } from 'rxjs/operators';
 import { ProjectsApiService } from '../core/services/gitlab-api/projects-api.service';
 import { FileInProject } from './search-results-list/file-in-project';
 import { Project } from '../core/services/gitlab-api/models/project';
+import { Server } from '../servers/server';
+import { SettingsService } from '../settings/settings.service';
 
 enum ProjectsSearchType {
     ALL = 'ALL',
@@ -36,6 +37,7 @@ interface SearchTerms {
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnDestroy {
+    private static readonly SEARCH_SAVE_STORAGE_KEY = 'saved_search';
     private static readonly ALL_GROUPS_ID = '-1';
     ProjectsSearchType = ProjectsSearchType;
 
@@ -66,7 +68,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         private projectsApiService: ProjectsApiService,
         private searchService: SearchService,
         private formBuilder: FormBuilder,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private settingsService: SettingsService
     ) {
         this.projectsSearchTypeSubscription = this.subscribeToProjectsToSearch();
     }
@@ -77,6 +80,10 @@ export class SearchComponent implements OnInit, OnDestroy {
             if (this.server) {
                 this.loadGroups();
                 this.resetSearch();
+
+                if (this.settingsService.getCurrentSettings().search.rememberLastSearch) {
+                    this.patchSavedSearch();
+                }
             }
         });
     }
@@ -116,7 +123,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         ]).pipe(
             filter(([type]) => type === ProjectsSearchType.SELECTED),
             switchMap(([type, group]) => {
-                this.searchForm.patchValue({projects: []});
+                this.searchForm.patchValue({ projects: [] });
                 this.projectsInSelectedGroup = [];
                 this.projectsLoading = true;
                 return this.getProjectsOfGroup(group).pipe(finalize(() => this.projectsLoading = false));
@@ -128,6 +135,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     private makeSearch(terms: SearchTerms): Observable<ProjectSearchResult> {
+        this.saveSearch(this.server.name, terms);
+
         if (terms.projectsSearchType === ProjectsSearchType.ALL) {
             return this.searchService.searchInGroup(terms.group, undefined, terms.searchText, terms.searchFilename);
         } else if (terms.projectsSearchType === ProjectsSearchType.SELECTED) {
@@ -149,6 +158,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchResults = [];
         this.cancelSearch();
         this.searchInProgress = false;
+
         this.searchForm.setValue({
             group: SearchComponent.ALL_GROUPS_ID,
             projectsSearchType: ProjectsSearchType.ALL,
@@ -171,6 +181,12 @@ export class SearchComponent implements OnInit, OnDestroy {
             );
     }
 
+    private patchSavedSearch(): void {
+        const savedSearch: any = this.getSavedSearch(this.server.name) || {};
+        // TODO: add validation (do group and projects still exist?)
+        this.searchForm.patchValue(savedSearch);
+    }
+
     private onResultForProjectReceived(result: ProjectSearchResult): void {
         if (result.fileSearchResults && result.fileSearchResults.size > 0) {
             this.searchResults.push(result);
@@ -181,5 +197,21 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
         }
+    }
+
+    private saveSearch(serverName: string, searchTerms: SearchTerms): void {
+        const savedSearches = this.getSavedSearches();
+        savedSearches[serverName] = searchTerms;
+        localStorage.setItem(SearchComponent.SEARCH_SAVE_STORAGE_KEY, JSON.stringify(savedSearches));
+    }
+
+    private getSavedSearch(serverName: string): SearchTerms {
+        const savedSearches = this.getSavedSearches();
+        return savedSearches[serverName];
+    }
+
+    private getSavedSearches(): { [key: string]: SearchTerms } {
+        const savedSearches = localStorage.getItem(SearchComponent.SEARCH_SAVE_STORAGE_KEY);
+        return savedSearches ? JSON.parse(savedSearches) : {};
     }
 }

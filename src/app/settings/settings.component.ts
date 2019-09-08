@@ -16,6 +16,9 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
         fileViewer: this.formBuilder.group({
             fullScreen: [false],
             wrapLines: [false]
+        }),
+        search: this.formBuilder.group({
+            rememberLastSearch: [false]
         })
     });
 

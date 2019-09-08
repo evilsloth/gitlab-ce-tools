@@ -13,6 +13,13 @@
                     <label>Wrap long lines</label>
                 </clr-checkbox-wrapper>
             </div>
+            <div formGroupName="search">
+                <div class="setting-section-title">Search</div>
+                <clr-checkbox-wrapper>
+                    <input clrCheckbox type="checkbox" formControlName="rememberLastSearch" />
+                    <label>Remember last search</label>
+                </clr-checkbox-wrapper>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>

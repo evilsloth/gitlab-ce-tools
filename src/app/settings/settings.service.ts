@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { getDefaultSettings, Settings } from './settings';
+import { getDefaultSettings, Settings, getSettingsPatchedWithDefaults } from './settings';
 
 @Injectable({
     providedIn: 'root'
@@ -29,7 +29,8 @@ export class SettingsService {
 
     private getSettingsFromStorage(): Settings {
         const savedSettings = localStorage.getItem(SettingsService.SETTINGS_STORAGE_KEY);
-        return savedSettings ? JSON.parse(savedSettings) : getDefaultSettings();
+        const parsedSettings = JSON.parse(savedSettings);
+        return parsedSettings ? getSettingsPatchedWithDefaults(parsedSettings) : getDefaultSettings();
     }
 
     private saveSettingsInStorage(settings: Settings) {
