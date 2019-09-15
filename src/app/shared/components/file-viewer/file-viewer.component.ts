@@ -127,7 +127,10 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
                 ace.session.addMarker(range, 'lineMarker', 'fullLine', false);
                 ace.session.addMarker(range, 'wordMarker', 'text', false);
             });
-            this.goToNextHighlight();
+
+            if (this.highlightedRanges.length > 0) {
+                this.goToNextHighlight();
+            }
         });
     }
 
