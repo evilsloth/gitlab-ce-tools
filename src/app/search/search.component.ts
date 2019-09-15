@@ -15,6 +15,9 @@ import { FileInProject } from './search-results-list/file-in-project';
 import { Project } from '../core/services/gitlab-api/models/project';
 import { Server } from '../servers/server';
 import { SettingsService } from '../settings/settings.service';
+import { FileTreeLeaf } from './search-results-list/tree/file-tree-leaf';
+import { buildFileTreeForProject, buildFlatFileTreeForProject } from './search-results-list/tree/file-tree-builder';
+import { SearchResultsView } from '../settings/settings';
 
 enum ProjectsSearchType {
     ALL = 'ALL',
@@ -48,6 +51,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     projectsLoading = false;
     searchTerms: SearchTerms;
     searchResults: ProjectSearchResult[] = [];
+    searchResultsTree: FileTreeLeaf[] = [];
+    searchResultsView: SearchResultsView;
     searchSubscription: Subscription;
     searchInProgress = false;
     searchForm = this.formBuilder.group({
@@ -61,6 +66,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     private activeServerSubscription: Subscription;
     private projectsSearchTypeSubscription: Subscription;
+    private settingsSubscription: Subscription;
 
     constructor(
         private serversService: ServersService,
@@ -86,11 +92,17 @@ export class SearchComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.settingsSubscription = this.settingsService.getSettings().subscribe(settings => {
+            this.searchResultsView = settings.search.searchResultsView;
+            this.rebuildSearchResultsTree();
+        });
     }
 
     ngOnDestroy(): void {
         this.activeServerSubscription.unsubscribe();
         this.projectsSearchTypeSubscription.unsubscribe();
+        this.settingsSubscription.unsubscribe();
     }
 
     openFile(fileInProject: FileInProject): void {
@@ -181,6 +193,20 @@ export class SearchComponent implements OnInit, OnDestroy {
             );
     }
 
+    private rebuildSearchResultsTree(): void {
+        this.searchResultsTree = this.searchResults.map(result => this.buildSearchResultsTree(result));
+    }
+
+    private buildSearchResultsTree(searchResult: ProjectSearchResult): FileTreeLeaf {
+        if (this.searchResultsView === 'FLAT') {
+            return buildFlatFileTreeForProject(searchResult);
+        } else if (this.searchResultsView === 'TREE') {
+            return buildFileTreeForProject(searchResult);
+        }
+
+        throw new Error('Unhandled search results view: ' + this.searchResultsView);
+    }
+
     private patchSavedSearch(): void {
         const savedSearch: any = this.getSavedSearch(this.server.name) || {};
         // TODO: add validation (do group and projects still exist?)
@@ -190,6 +216,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private onResultForProjectReceived(result: ProjectSearchResult): void {
         if (result.fileSearchResults && result.fileSearchResults.size > 0) {
             this.searchResults.push(result);
+            this.searchResultsTree = [...this.searchResultsTree, this.buildSearchResultsTree(result)];
         }
     }
 

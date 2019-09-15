@@ -18,7 +18,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
             wrapLines: [false]
         }),
         search: this.formBuilder.group({
-            rememberLastSearch: [false]
+            rememberLastSearch: [false],
+            searchResultsView: ['FLAT']
         })
     });
 

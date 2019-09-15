@@ -10,7 +10,10 @@ export interface FileViewerSettings {
 
 export interface SearchSettings {
     rememberLastSearch: boolean;
+    searchResultsView: SearchResultsView;
 }
+
+export type SearchResultsView = 'FLAT' | 'TREE';
 
 export function getDefaultSettings(): Settings {
     return {
@@ -19,7 +22,8 @@ export function getDefaultSettings(): Settings {
             wrapLines: false
         },
         search: {
-            rememberLastSearch: true
+            rememberLastSearch: true,
+            searchResultsView: 'FLAT'
         }
     };
 }

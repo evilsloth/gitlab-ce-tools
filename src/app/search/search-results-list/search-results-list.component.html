@@ -1,13 +1,24 @@
 <div *ngIf="searchResults && searchResults.length > 0" class="search-results">
-    <clr-tree-node *ngFor="let searchResult of searchResults">
-        <clr-icon shape="folder"></clr-icon>
-        {{searchResult.project.name_with_namespace}} [{{searchResult.project.default_branch}}]
-        <clr-tree-node class="clickable" *ngFor="let fileSearchResult of searchResult.fileSearchResults | keyvalue">
-            <clr-icon shape="file"></clr-icon>
-            <a class="file-link" (click)="onFileSelected(fileSearchResult.key, searchResult.project)">
-                <app-path-text class="file-path" [path]="fileSearchResult.key"></app-path-text>
-            </a>
-            <span class="badge badge-success results-count" *ngIf="fileSearchResult.value.length > 1">{{fileSearchResult.value.length}}</span>
+    <clr-tree [clrLazy]="true">
+        <clr-tree-node *clrRecursiveFor="let searchResult of searchResults; getChildren: getChildren"
+                       [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0">
+            <ng-container *ngIf="searchResult.type === 'PROJECT'">
+                <clr-icon shape="organization"></clr-icon>
+                {{searchResult.name}} <span class="label label-info">{{searchResult.project.default_branch}}</span>
+            </ng-container>
+            <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
+                <clr-icon shape="folder"></clr-icon>
+                {{searchResult.name}}
+            </ng-container>
+            <ng-container *ngIf="searchResult.type === 'FILE'">
+                <clr-icon shape="file"></clr-icon>
+                <a class="file-link" (click)="onFileSelected(searchResult.filePath, searchResult.project)">
+                    <app-path-text class="file-path" [path]="searchResult.name"></app-path-text>
+                </a>
+                <span class="badge badge-success results-count" *ngIf="searchResult.fileSearchResults.length > 1">
+                    {{searchResult.fileSearchResults.length}}
+                </span>
+            </ng-container>
         </clr-tree-node>
-    </clr-tree-node>
+    </clr-tree>
 </div>
