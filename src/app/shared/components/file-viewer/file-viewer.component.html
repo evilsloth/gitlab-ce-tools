@@ -1,8 +1,22 @@
 <clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()" [clrModalSize]="'xl'" [clrModalStaticBackdrop]="false">
     <h3 class="modal-title">
         <app-path-text [path]="filename"></app-path-text>
+        <div class="jump-lines-icons" *ngIf="highlightedRanges.length > 0">
+            <span class="jump-counter">{{jumpedToLineIndex + 1}} of {{highlightedRanges.length}}</span>
+            <div class="btn-group btn-outline-primary btn-icon btn-sm">
+                <button class="btn" (click)="goToPreviousHighlight()">
+                    <clr-icon shape="angle"></clr-icon>
+                    <span class="clr-icon-title">Previous</span>
+                </button>
+                <button class="btn" (click)="goToNextHighlight()">
+                    <clr-icon shape="angle down"></clr-icon>
+                    <span class="clr-icon-title">Next</span>
+                </button>
+            </div>
+        </div>
     </h3>
     <div class="modal-body">
+
         <div class="progress loop" *ngIf="!fileLoaded"><progress></progress></div>
 
         <div class="alert alert-danger" role="alert" *ngIf="error">

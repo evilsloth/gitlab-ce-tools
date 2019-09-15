@@ -113,6 +113,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     search(): void {
         this.searchInProgress = true;
         this.searchResults = [];
+        this.searchResultsTree = [];
 
         this.cancelSearch();
 
@@ -168,6 +169,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     private resetSearch(): void {
         this.searchResults = [];
+        this.searchResultsTree = [];
         this.cancelSearch();
         this.searchInProgress = false;
 

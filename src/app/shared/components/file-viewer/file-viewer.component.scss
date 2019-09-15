@@ -51,3 +51,19 @@ ace::ng-deep {
         }
     }
 }
+
+app-path-text {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.jump-lines-icons {
+    position: absolute;
+    line-height: 0;
+    right: 15px;
+}
+
+.jump-counter {
+    font-size: 0.6rem;
+    margin-right: 10px;
+}

@@ -4,6 +4,8 @@ import { Modal } from 'src/app/core/services/modal/modal';
 import { FilesApiService } from 'src/app/core/services/gitlab-api/files-api.service';
 import { AceComponent, AceConfigInterface } from 'ngx-ace-wrapper';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
+import { SettingsService } from 'src/app/settings/settings.service';
+import { Range } from 'brace';
 
 import 'brace';
 import 'brace/mode/javascript';
@@ -20,7 +22,6 @@ import 'brace/mode/properties';
 import 'brace/mode/text';
 import 'brace/theme/chrome';
 import 'brace/ext/searchbox';
-import { SettingsService } from 'src/app/settings/settings.service';
 
 @Component({
   selector: 'app-file-viewer',
@@ -54,6 +55,9 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     textToHighlight: string;
     fileLoaded = false;
     error: any;
+
+    highlightedRanges: Range[] = [];
+    jumpedToLineIndex = -1;
 
     @HostBinding('class.fullscreen')
     fullScreen = false;
@@ -91,6 +95,25 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
             );
     }
 
+    goToPreviousHighlight() {
+        const maxIndex = this.highlightedRanges.length - 1;
+        this.jumpedToLineIndex = this.jumpedToLineIndex > 0 ? this.jumpedToLineIndex - 1 : maxIndex;
+        this.goToHighlight(this.jumpedToLineIndex);
+    }
+
+    goToNextHighlight() {
+        const maxIndex = this.highlightedRanges.length - 1;
+        this.jumpedToLineIndex = this.jumpedToLineIndex < maxIndex ? this.jumpedToLineIndex + 1 : 0;
+        this.goToHighlight(this.jumpedToLineIndex);
+    }
+
+    private goToHighlight(index: number): void {
+        const range = this.highlightedRanges[index];
+        const ace = this.ace.directiveRef.ace();
+        ace.scrollToLine(range.start.row + 1, true, true, () => {});
+        ace.gotoLine(range.start.row + 1, range.end.column, true);
+    }
+
     private onFileLoaded(): void {
         const ace = this.ace.directiveRef.ace();
         ace.focus();
@@ -98,12 +121,13 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         setTimeout(() => {
             (ace as any).findAll(this.textToHighlight);
             const selection = ace.session.getSelection();
-            const ranges = selection.getAllRanges();
+            this.highlightedRanges = selection.getAllRanges();
 
-            ranges.forEach(range => {
+            this.highlightedRanges.forEach(range => {
                 ace.session.addMarker(range, 'lineMarker', 'fullLine', false);
                 ace.session.addMarker(range, 'wordMarker', 'text', false);
             });
+            this.goToNextHighlight();
         });
     }
 
