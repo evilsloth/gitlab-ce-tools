@@ -36,11 +36,11 @@ function buildMenu() {
             submenu: [
                 {
                     label: 'Learn More',
-                    click() { shell.openExternalSync('https://github.com/evilsloth/gitlab-ce-tools') }
+                    click() { shell.openExternal('https://github.com/evilsloth/gitlab-ce-tools') }
                 },
                 {
                     label: 'Search Issues',
-                    click() { shell.openExternalSync('https://github.com/evilsloth/gitlab-ce-tools/issues') }
+                    click() { shell.openExternal('https://github.com/evilsloth/gitlab-ce-tools/issues') }
                 },
                 {
                     id: UPDATE_MENU_ITEM_ID,
@@ -148,7 +148,7 @@ autoUpdater.on('update-not-available', () => {
 autoUpdater.on('update-downloaded', () => {
     dialog.showMessageBox({
         title: 'Install Updates',
-        message: 'Updates downloaded, application will be quit for update...'
+        message: 'Updates downloaded, application will quit for update...'
     }, () => {
         setImmediate(() => autoUpdater.quitAndInstall());
     });
