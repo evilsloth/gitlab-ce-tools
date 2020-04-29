@@ -1,11 +1,19 @@
 <div *ngIf="searchResults && searchResults.length > 0" class="search-results">
+    <button type="submit" class="btn btn-link btn-sm" (click)="expandAll()">
+        <clr-icon shape="plus"></clr-icon>
+        Expand all
+    </button>
+    <button type="submit" class="btn btn-link btn-sm" (click)="collapseAll()">
+        <clr-icon shape="minus"></clr-icon>
+        Collapse all
+    </button>
     <!-- Recursive tree does not detect changes correctly and it does not implement trackBy
          (https://github.com/vmware/clarity/issues/3382)
          using ngForOf to create one tree per project until it's fixed -->
     <div *ngFor="let projectSearchResult of searchResults">
         <clr-tree [clrLazy]="true">
             <clr-tree-node *clrRecursiveFor="let searchResult of projectSearchResult; getChildren: getChildren"
-                        [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0">
+                        [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0" [(clrExpanded)]="searchResult.expanded">
                 <ng-container *ngIf="searchResult.type === 'PROJECT'">
                     <clr-icon shape="organization"></clr-icon>
                     {{searchResult.name}} <span class="label label-info">{{searchResult.project.default_branch}}</span>

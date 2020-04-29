@@ -8,4 +8,5 @@ export interface FileTreeLeaf {
     filePath?: string;
     fileSearchResults?: FileSearchResult[];
     leafs?: FileTreeLeaf[];
+    expanded?: boolean;
 }
