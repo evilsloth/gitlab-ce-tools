@@ -113,15 +113,16 @@ app.on('activate', () => {
 
 
 autoUpdater.on('update-available', (updateInfo) => {
-    dialog.showMessageBox({
-        type: 'info',
+    dialog.showMessageBox(win, {
+        type: 'question',
         title: 'New version found',
         message: `Current version: ${app.getVersion()}\nNew version: ${updateInfo.version}\nDo you want to update now?`,
         buttons: ['Yes', 'No']
-    }, (buttonIndex) => {
+    }).then(res => {
+        const buttonIndex = res.response;
         if (buttonIndex === 0) {
             autoUpdater.downloadUpdate();
-            dialog.showMessageBox({
+            dialog.showMessageBox(win, {
                 title: 'Downloading updates',
                 message: 'Updates are being downloaded in background. You will be notified when they are ready to install.'
             });
@@ -138,7 +139,7 @@ autoUpdater.on('update-not-available', () => {
     updateMenuItem = null;
 
     if (updateRunFrom !== UPDATE_RUN_ON_STARTUP) {
-        dialog.showMessageBox({
+        dialog.showMessageBox(win, {
             title: 'No updates found',
             message: 'Current version is up to date.'
         });
@@ -146,10 +147,10 @@ autoUpdater.on('update-not-available', () => {
 });
 
 autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
+    dialog.showMessageBox(win, {
         title: 'Install Updates',
         message: 'Updates downloaded, application will quit for update...'
-    }, () => {
+    }).then(() => {
         setImmediate(() => autoUpdater.quitAndInstall());
     });
 });
