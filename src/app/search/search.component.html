@@ -61,7 +61,7 @@
 </div>
 
 <div class="progress-bar-container">
-    <div class="progress loop" *ngIf="searchInProgress"><progress></progress></div>
+    <clr-progress-bar clrLoop *ngIf="searchInProgress"></clr-progress-bar>
 </div>
 
 <app-search-results-list [searchResults]="searchResultsTree" (fileSelected)="openFile($event)"></app-search-results-list>
