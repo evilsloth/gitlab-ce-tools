@@ -16,3 +16,8 @@
     font-size: 0.9em;
     text-decoration: inherit;
 }
+
+.expandable-name {
+    cursor: pointer;
+    user-select: none;
+}

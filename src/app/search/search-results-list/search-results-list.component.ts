@@ -2,12 +2,13 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, Change
 import { FileInProject } from './file-in-project';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileTreeLeaf } from './tree/file-tree-leaf';
+import { Observable, of } from 'rxjs';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
     selector: 'app-search-results-list',
     templateUrl: './search-results-list.component.html',
-    styleUrls: ['./search-results-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./search-results-list.component.scss']
 })
 export class SearchResultsListComponent {
     @Input()
@@ -16,10 +17,10 @@ export class SearchResultsListComponent {
     @Output()
     fileSelected = new EventEmitter<FileInProject>();
 
-    constructor(private changeDetectionRef: ChangeDetectorRef) { }
+    constructor() { }
 
-    getChildren(leaf: FileTreeLeaf): FileTreeLeaf[] {
-        return leaf.leafs;
+    getChildren(leaf: FileTreeLeaf): Observable<FileTreeLeaf[]> {
+        return leaf.leafs ? of(leaf.leafs, async) : null;
     }
 
     onFileSelected(filename: string, project: Project): void {
@@ -27,21 +28,19 @@ export class SearchResultsListComponent {
     }
 
     expandAll(): void {
-        for (let i = 0; i < this.searchResults.length; i++) {
-            setTimeout(() => {
-                this.searchResults[i] = this.createExpandedTree(this.searchResults[i], true);
-                this.changeDetectionRef.detectChanges();
-            });
-        }
+        this.searchResults.forEach(leaf => this.setTreeExpanded(leaf, true));
     }
 
     collapseAll(): void {
-        for (let i = 0; i < this.searchResults.length; i++) {
-            setTimeout(() => {
-                this.searchResults[i] = this.createExpandedTree(this.searchResults[i], false);
-                this.changeDetectionRef.detectChanges();
-            });
-        }
+        this.searchResults = this.searchResults.map(leaf => this.createExpandedTree(leaf, false));
+    }
+
+    toggleExpandLeaf(leaf: FileTreeLeaf) {
+        leaf.expanded = !leaf.expanded;
+    }
+
+    toggleExpandTree(leaf: FileTreeLeaf): void {
+        this.setTreeExpanded(leaf, !leaf.expanded);
     }
 
     private createExpandedTree(leaf: FileTreeLeaf, expanded: boolean): FileTreeLeaf {
@@ -50,5 +49,13 @@ export class SearchResultsListComponent {
             leafs: leaf.leafs && leaf.leafs.map(leaf => this.createExpandedTree(leaf, expanded)),
             expanded
         };
+    }
+
+    private setTreeExpanded(leaf: FileTreeLeaf, expanded: boolean): void {
+        leaf.expanded = expanded;
+
+        if (leaf.leafs) {
+            leaf.leafs.forEach(leaf => this.setTreeExpanded(leaf, expanded));
+        }
     }
 }

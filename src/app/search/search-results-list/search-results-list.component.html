@@ -7,31 +7,31 @@
         <clr-icon shape="minus"></clr-icon>
         Collapse all
     </button>
-    <!-- Recursive tree does not detect changes correctly and it does not implement trackBy
-         (https://github.com/vmware/clarity/issues/3382)
-         using ngForOf to create one tree per project until it's fixed -->
-    <div *ngFor="let projectSearchResult of searchResults">
-        <clr-tree [clrLazy]="true">
-            <clr-tree-node *clrRecursiveFor="let searchResult of projectSearchResult; getChildren: getChildren"
-                        [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0" [(clrExpanded)]="searchResult.expanded">
-                <ng-container *ngIf="searchResult.type === 'PROJECT'">
-                    <clr-icon shape="organization"></clr-icon>
-                    {{searchResult.name}} <span class="label label-info">{{searchResult.project.default_branch}}</span>
-                </ng-container>
-                <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
-                    <clr-icon shape="folder"></clr-icon>
+    <clr-tree [clrLazy]="true">
+        <clr-tree-node *clrRecursiveFor="let searchResult of searchResults; getChildren: getChildren"
+                    [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0" [(clrExpanded)]="searchResult.expanded">
+            <ng-container *ngIf="searchResult.type === 'PROJECT'">
+                <clr-icon shape="organization"></clr-icon>
+                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="toggleExpandTree(searchResult)">
                     {{searchResult.name}}
-                </ng-container>
-                <ng-container *ngIf="searchResult.type === 'FILE'">
-                    <clr-icon shape="file"></clr-icon>
-                    <a class="file-link" (click)="onFileSelected(searchResult.filePath, searchResult.project)">
-                        <app-path-text class="file-path" [path]="searchResult.name"></app-path-text>
-                    </a>
-                    <span class="badge badge-success results-count" *ngIf="searchResult.fileSearchResults.length > 1">
-                        {{searchResult.fileSearchResults.length}}
-                    </span>
-                </ng-container>
-            </clr-tree-node>
-        </clr-tree>
-    </div>
+                </span>
+                <span class="label label-info">{{searchResult.project.default_branch}}</span>
+            </ng-container>
+            <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
+                <clr-icon shape="folder"></clr-icon>
+                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="toggleExpandTree(searchResult)">
+                    {{searchResult.name}}
+                </span>
+            </ng-container>
+            <ng-container *ngIf="searchResult.type === 'FILE'">
+                <clr-icon shape="file"></clr-icon>
+                <a class="file-link" (click)="onFileSelected(searchResult.filePath, searchResult.project)">
+                    <app-path-text class="file-path" [path]="searchResult.name"></app-path-text>
+                </a>
+                <span class="badge badge-success results-count" *ngIf="searchResult.fileSearchResults.length > 1">
+                    {{searchResult.fileSearchResults.length}}
+                </span>
+            </ng-container>
+        </clr-tree-node>
+    </clr-tree>
 </div>
