@@ -39,8 +39,8 @@ export class SearchResultsListComponent {
         leaf.expanded = !leaf.expanded;
     }
 
-    toggleExpandTree(leaf: FileTreeLeaf): void {
-        this.setTreeExpanded(leaf, !leaf.expanded);
+    expandTree(leaf: FileTreeLeaf): void {
+        this.setTreeExpanded(leaf, true);
     }
 
     private createExpandedTree(leaf: FileTreeLeaf, expanded: boolean): FileTreeLeaf {

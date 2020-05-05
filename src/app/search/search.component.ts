@@ -16,7 +16,7 @@ import { Project } from '../core/services/gitlab-api/models/project';
 import { Server } from '../servers/server';
 import { SettingsService } from '../settings/settings.service';
 import { FileTreeLeaf } from './search-results-list/tree/file-tree-leaf';
-import { buildFileTreeForProject, buildFlatFileTreeForProject } from './search-results-list/tree/file-tree-builder';
+import { buildFileTreeForProject, buildFlatFileTreeForProject, buildCompactFileTreeForProject } from './search-results-list/tree/file-tree-builder';
 import { SearchResultsView } from '../settings/settings';
 
 enum ProjectsSearchType {
@@ -204,6 +204,8 @@ export class SearchComponent implements OnInit, OnDestroy {
             return buildFlatFileTreeForProject(searchResult);
         } else if (this.searchResultsView === 'TREE') {
             return buildFileTreeForProject(searchResult);
+        } else if (this.searchResultsView === 'COMPACT_TREE') {
+            return buildCompactFileTreeForProject(searchResult);
         }
 
         throw new Error('Unhandled search results view: ' + this.searchResultsView);

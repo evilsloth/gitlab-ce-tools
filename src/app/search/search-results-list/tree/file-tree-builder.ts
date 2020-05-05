@@ -3,6 +3,12 @@ import { FileTreeLeaf } from './file-tree-leaf';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileSearchResult } from 'src/app/core/services/gitlab-api/models/file-search-result';
 
+export function buildCompactFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
+    const tree = buildFileTreeForProject(searchResult);
+    compactTree(tree);
+    return tree;
+}
+
 export function buildFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
     return {
         project: searchResult.project,
@@ -61,4 +67,20 @@ function buildPathTree(remainingPathParts: string[],
     }
 
     buildPathTree(remainingPathParts, directoryLeaf.leafs, project, filePath, searchResults);
+}
+
+function compactTree(leaf: FileTreeLeaf) {
+    if (leaf.leafs) {
+        leaf.leafs.forEach(childLeaf => compactTree(childLeaf));
+    }
+
+    if (leaf.type == 'DIRECTORY' && containsSingleDirectory(leaf)) {
+        const child = leaf.leafs[0];
+        leaf.name = leaf.name + '/' + child.name;
+        leaf.leafs = child.leafs;
+    }
+}
+
+function containsSingleDirectory(leaf: FileTreeLeaf): boolean {
+    return leaf.leafs && leaf.leafs.length == 1 && leaf.leafs[0].type == 'DIRECTORY';
 }

@@ -12,14 +12,14 @@
                     [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0" [(clrExpanded)]="searchResult.expanded">
             <ng-container *ngIf="searchResult.type === 'PROJECT'">
                 <clr-icon shape="organization"></clr-icon>
-                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="toggleExpandTree(searchResult)">
+                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="expandTree(searchResult)">
                     {{searchResult.name}}
                 </span>
                 <span class="label label-info">{{searchResult.project.default_branch}}</span>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
                 <clr-icon shape="folder"></clr-icon>
-                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="toggleExpandTree(searchResult)">
+                <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="expandTree(searchResult)">
                     {{searchResult.name}}
                 </span>
             </ng-container>

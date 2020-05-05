@@ -13,7 +13,7 @@ export interface SearchSettings {
     searchResultsView: SearchResultsView;
 }
 
-export type SearchResultsView = 'FLAT' | 'TREE';
+export type SearchResultsView = 'FLAT' | 'TREE' | 'COMPACT_TREE';
 
 export function getDefaultSettings(): Settings {
     return {
