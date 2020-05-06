@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, Change
 import { FileInProject } from './file-in-project';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileTreeLeaf } from './tree/file-tree-leaf';
-import { Observable, of } from 'rxjs';
+import { Observable, of, scheduled } from 'rxjs';
 import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
@@ -20,7 +20,7 @@ export class SearchResultsListComponent {
     constructor() { }
 
     getChildren(leaf: FileTreeLeaf): Observable<FileTreeLeaf[]> {
-        return leaf.leafs ? of(leaf.leafs, async) : null;
+        return leaf.leafs ? scheduled(of(leaf.leafs), async) : null;
     }
 
     onFileSelected(filename: string, project: Project): void {
@@ -46,7 +46,7 @@ export class SearchResultsListComponent {
     private createExpandedTree(leaf: FileTreeLeaf, expanded: boolean): FileTreeLeaf {
         return {
             ...leaf,
-            leafs: leaf.leafs && leaf.leafs.map(leaf => this.createExpandedTree(leaf, expanded)),
+            leafs: leaf.leafs && leaf.leafs.map(childLeaf => this.createExpandedTree(childLeaf, expanded)),
             expanded
         };
     }
@@ -55,7 +55,7 @@ export class SearchResultsListComponent {
         leaf.expanded = expanded;
 
         if (leaf.leafs) {
-            leaf.leafs.forEach(leaf => this.setTreeExpanded(leaf, expanded));
+            leaf.leafs.forEach(childLeaf => this.setTreeExpanded(childLeaf, expanded));
         }
     }
 }

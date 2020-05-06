@@ -74,7 +74,7 @@ function compactTree(leaf: FileTreeLeaf) {
         leaf.leafs.forEach(childLeaf => compactTree(childLeaf));
     }
 
-    if (leaf.type == 'DIRECTORY' && containsSingleDirectory(leaf)) {
+    if (leaf.type === 'DIRECTORY' && containsSingleDirectory(leaf)) {
         const child = leaf.leafs[0];
         leaf.name = leaf.name + '/' + child.name;
         leaf.leafs = child.leafs;
@@ -82,5 +82,5 @@ function compactTree(leaf: FileTreeLeaf) {
 }
 
 function containsSingleDirectory(leaf: FileTreeLeaf): boolean {
-    return leaf.leafs && leaf.leafs.length == 1 && leaf.leafs[0].type == 'DIRECTORY';
+    return leaf.leafs && leaf.leafs.length === 1 && leaf.leafs[0].type === 'DIRECTORY';
 }
