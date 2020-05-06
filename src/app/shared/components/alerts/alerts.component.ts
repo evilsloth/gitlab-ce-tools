@@ -18,4 +18,8 @@ export class AlertsComponent {
     onCloseAlert(alert: Alert): void {
         this.closeAlert.emit(alert);
     }
+
+    reloadPage() {
+        location.reload();
+    }
 }

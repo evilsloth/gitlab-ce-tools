@@ -32,10 +32,10 @@ export class SearchResultsListComponent {
     }
 
     collapseAll(): void {
-        this.searchResults = this.searchResults.map(leaf => this.createExpandedTree(leaf, false));
+        this.searchResults.forEach(leaf => this.setTreeExpanded(leaf, false));
     }
 
-    toggleExpandLeaf(leaf: FileTreeLeaf) {
+    toggleExpandLeaf(leaf: FileTreeLeaf): void {
         leaf.expanded = !leaf.expanded;
     }
 
@@ -43,12 +43,10 @@ export class SearchResultsListComponent {
         this.setTreeExpanded(leaf, true);
     }
 
-    private createExpandedTree(leaf: FileTreeLeaf, expanded: boolean): FileTreeLeaf {
-        return {
-            ...leaf,
-            leafs: leaf.leafs && leaf.leafs.map(childLeaf => this.createExpandedTree(childLeaf, expanded)),
-            expanded
-        };
+    onExpandChange(leaf: FileTreeLeaf): void {
+        if (!leaf.expanded) {
+            this.setTreeExpanded(leaf, false);
+        }
     }
 
     private setTreeExpanded(leaf: FileTreeLeaf, expanded: boolean): void {

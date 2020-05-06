@@ -15,7 +15,18 @@ export class AlertsService {
     }
 
     addAlert(alert: Alert) {
-        const alerts = [...this.subject.value, alert];
+        const duplicateIndex = this.subject.value.findIndex(currentAlert => currentAlert.text === alert.text);
+        let alerts;
+
+        if (duplicateIndex !== -1) {
+            const duplicate = this.subject.value[duplicateIndex];
+            alert.count = duplicate.count ? duplicate.count + 1 : 2;
+            alerts = this.subject.value.filter((el, index) => index !== duplicateIndex);
+            alerts.push(alert);
+        } else {
+            alerts = [...this.subject.value, alert];
+        }
+
         this.subject.next(alerts);
     }
 

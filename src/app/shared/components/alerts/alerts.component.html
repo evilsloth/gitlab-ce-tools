@@ -8,7 +8,16 @@
                     <clr-icon class="alert-icon" shape="exclamation-triangle" *ngSwitchCase="'warning'"></clr-icon>
                     <clr-icon class="alert-icon" shape="exclamation-circle" *ngSwitchCase="'danger'"></clr-icon>
                 </div>
-                <span class="alert-text">{{alert.text}}</span>
+                <span class="alert-text">
+                    {{alert.text}}
+                    <span class="badge" *ngIf="alert.count && alert.count > 1">{{alert.count}}</span>
+                </span>
+                <div class="alert-actions">
+                    <a href="#" class="alert-action" (click)="reloadPage()">
+                        <clr-icon shape="refresh"></clr-icon>
+                        Reload
+                    </a>
+                </div>
             </div>
         </div>
         <button type="button" class="close" aria-label="Close" (click)="onCloseAlert(alert)">
