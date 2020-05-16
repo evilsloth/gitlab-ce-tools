@@ -17,7 +17,16 @@
     text-decoration: inherit;
 }
 
+.directory-path {
+    line-height: 1.4em;
+    display: inline-block;
+}
+
 .expandable-name {
     cursor: pointer;
     user-select: none;
+}
+
+clr-icon {
+    flex-shrink: 0;
 }

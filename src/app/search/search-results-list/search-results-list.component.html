@@ -21,7 +21,7 @@
             <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
                 <clr-icon shape="folder"></clr-icon>
                 <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="expandTree(searchResult)">
-                    {{searchResult.name}}
+                    <app-path-text class="directory-path" [path]="searchResult.name"></app-path-text>
                 </span>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'FILE'">
