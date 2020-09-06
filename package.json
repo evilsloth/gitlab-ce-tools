@@ -1,6 +1,6 @@
 {
   "name": "gitlab-ce-tools",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Additional tools for Gitlab CE",
   "author": "evilsloth",
   "main": "main.js",
