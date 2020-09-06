@@ -18,7 +18,7 @@ Current version (built from the most recent commit on master branch) can be foun
 - simple file viewer with syntax highlighting (click on the file link to open)
 - configurable result view style (flat / tree / compact tree - tree with empty directories collapsed)
 - expand all / collapse all on search results tree
-- double click to expand / collapse search result recursively
+- double click to expand search result recursively
 - hide search results by clicking icon next to result element (must be enabled by checking *Enable result entries hiding* in options menu)
 
 
