@@ -11,11 +11,26 @@ import { async } from 'rxjs/internal/scheduler/async';
     styleUrls: ['./search-results-list.component.scss']
 })
 export class SearchResultsListComponent {
+
+    private _searchResults: FileTreeLeaf[];
+
+    get searchResults(): FileTreeLeaf[] {
+        return this._searchResults;
+    }
+
     @Input()
-    searchResults: FileTreeLeaf[];
+    set searchResults(value: FileTreeLeaf[]) {
+        this._searchResults = value;
+        this.isAnyResultHidden = false;
+    }
+
+    @Input()
+    enableResultHiding: boolean;
 
     @Output()
     fileSelected = new EventEmitter<FileInProject>();
+
+    isAnyResultHidden = false;
 
     constructor() { }
 
@@ -49,11 +64,35 @@ export class SearchResultsListComponent {
         }
     }
 
+    hideResult(leaf: FileTreeLeaf) {
+        leaf.hidden = true;
+        this.isAnyResultHidden = true;
+    }
+
+    clearHidden() {
+        this.searchResults.forEach(leaf => this.clearTreeHiddenFlag(leaf));
+        this.isAnyResultHidden = false;
+    }
+
     private setTreeExpanded(leaf: FileTreeLeaf, expanded: boolean): void {
-        leaf.expanded = expanded;
+        this.setTreeProperties(leaf, { expanded });
+    }
+
+    private clearTreeHiddenFlag(leaf: FileTreeLeaf): void {
+        this.setTreeProperties(leaf, { hidden: false });
+    }
+
+    /**
+     * Recursively overrides properties given in propertiesToChange argument in all tree nodes
+     * @param leaf leaf of the tree to start with
+     * @param propertiesToChange which properties should be overriden (key-value pairs defined in FileTreeLeaf type)
+     */
+    private setTreeProperties(leaf: FileTreeLeaf, propertiesToChange: Partial<FileTreeLeaf>) {
+        Object.assign(leaf, propertiesToChange);
 
         if (leaf.leafs) {
-            leaf.leafs.forEach(childLeaf => this.setTreeExpanded(childLeaf, expanded));
+            leaf.leafs.forEach(childLeaf => this.setTreeProperties(childLeaf, propertiesToChange));
         }
     }
+
 }

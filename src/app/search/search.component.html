@@ -64,4 +64,7 @@
     <clr-progress-bar clrLoop *ngIf="searchInProgress"></clr-progress-bar>
 </div>
 
-<app-search-results-list [searchResults]="searchResultsTree" (fileSelected)="openFile($event)"></app-search-results-list>
+<app-search-results-list [searchResults]="searchResultsTree"
+                         (fileSelected)="openFile($event)"
+                         [enableResultHiding]="enableResultHiding">
+</app-search-results-list>

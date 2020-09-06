@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Modal } from '../core/services/modal/modal';
 import { SettingsService } from './settings.service';
 import { Subscription } from 'rxjs';
+import { ElectronSettings } from './settings';
+import { IpcRenderer } from 'electron';
 
 @Component({
     selector: 'app-settings',
@@ -10,6 +12,9 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
+
+    appRunningInElectron = this.isAppRunningInElectron();
+
     private settingsSubscription: Subscription;
 
     settingsForm = this.formBuilder.group({
@@ -19,7 +24,11 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
         }),
         search: this.formBuilder.group({
             rememberLastSearch: [false],
+            enableResultHiding: [false],
             searchResultsView: ['FLAT']
+        }),
+        electron: this.formBuilder.group({
+            enableUnsafeRequests: [false]
         })
     });
 
@@ -38,6 +47,29 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
 
     save() {
         this.settingsService.updateSettings(this.settingsForm.value);
+        if (this.appRunningInElectron) {
+            this.sendChangedSettingsToElectron(this.settingsForm.value.electron);
+        }
+
         this.close();
     }
+
+    private isAppRunningInElectron(): boolean {
+        const userAgent = navigator.userAgent.toLowerCase();
+        return userAgent.indexOf(' electron/') > -1;
+    }
+
+    private sendChangedSettingsToElectron(electronSettings: ElectronSettings) {
+        if (window.require) {
+            try {
+                const ipcRenderer: IpcRenderer = window.require('electron').ipcRenderer;
+                ipcRenderer.send('SETTINGS_CHANGED', electronSettings);
+            } catch (e) {
+                throw e;
+            }
+        } else {
+            console.warn('Electron\'s IPC could not be loaded!');
+        }
+    }
+
 }

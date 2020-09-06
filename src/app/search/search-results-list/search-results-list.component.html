@@ -1,16 +1,20 @@
 <div *ngIf="searchResults && searchResults.length > 0" class="search-results">
-    <button type="submit" class="btn btn-link btn-sm" (click)="expandAll()">
+    <button type="button" class="btn btn-link btn-sm" (click)="expandAll()">
         <clr-icon shape="plus"></clr-icon>
         Expand all
     </button>
-    <button type="submit" class="btn btn-link btn-sm" (click)="collapseAll()">
+    <button type="button" class="btn btn-link btn-sm" (click)="collapseAll()">
         <clr-icon shape="minus"></clr-icon>
         Collapse all
+    </button>
+    <button type="button" class="btn btn-link btn-sm" (click)="clearHidden()" *ngIf="isAnyResultHidden">
+        <clr-icon shape="eye-hide"></clr-icon>
+        Reset hidden results
     </button>
     <clr-tree [clrLazy]="true">
         <clr-tree-node *clrRecursiveFor="let searchResult of searchResults; getChildren: getChildren"
                     [clrExpandable]="searchResult.leafs && searchResult.leafs.length > 0" [(clrExpanded)]="searchResult.expanded"
-                    (clrExpandedChange)="onExpandChange(searchResult)">
+                    (clrExpandedChange)="onExpandChange(searchResult)" [hidden]="searchResult.hidden">
             <ng-container *ngIf="searchResult.type === 'PROJECT'">
                 <clr-icon shape="organization"></clr-icon>
                 <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="expandTree(searchResult)">
@@ -33,6 +37,8 @@
                     {{searchResult.fileSearchResults.length}}
                 </span>
             </ng-container>
+            <clr-icon *ngIf="enableResultHiding" class="hide-icon" shape="eye-hide" (click)="hideResult(searchResult)">
+            </clr-icon>
         </clr-tree-node>
     </clr-tree>
 </div>

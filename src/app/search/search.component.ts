@@ -53,6 +53,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     projectsInSelectedGroup = [];
     groupsLoading = false;
     projectsLoading = false;
+    enableResultHiding = false;
     searchTerms: SearchTerms;
     searchResults: ProjectSearchResult[] = [];
     searchResultsTree: FileTreeLeaf[] = [];
@@ -99,6 +100,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         this.settingsSubscription = this.settingsService.getSettings().subscribe(settings => {
             this.searchResultsView = settings.search.searchResultsView;
+            this.enableResultHiding = settings.search.enableResultHiding;
             this.rebuildSearchResultsTree();
         });
     }

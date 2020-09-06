@@ -1,6 +1,7 @@
 export interface Settings {
     fileViewer: FileViewerSettings;
     search: SearchSettings;
+    electron: ElectronSettings;
 }
 
 export interface FileViewerSettings {
@@ -10,7 +11,12 @@ export interface FileViewerSettings {
 
 export interface SearchSettings {
     rememberLastSearch: boolean;
+    enableResultHiding: boolean;
     searchResultsView: SearchResultsView;
+}
+
+export interface ElectronSettings {
+    enableUnsafeRequests: boolean;
 }
 
 export type SearchResultsView = 'FLAT' | 'TREE' | 'COMPACT_TREE';
@@ -23,7 +29,11 @@ export function getDefaultSettings(): Settings {
         },
         search: {
             rememberLastSearch: true,
+            enableResultHiding: false,
             searchResultsView: 'FLAT'
+        },
+        electron: {
+            enableUnsafeRequests: false
         }
     };
 }

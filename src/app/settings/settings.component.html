@@ -19,6 +19,10 @@
                     <input clrCheckbox type="checkbox" formControlName="rememberLastSearch" />
                     <label>Remember last search</label>
                 </clr-checkbox-wrapper>
+                <clr-checkbox-wrapper>
+                    <input clrCheckbox type="checkbox" formControlName="enableResultHiding" />
+                    <label>Enable result entries hiding</label>
+                </clr-checkbox-wrapper>
                 <clr-radio-container clrInline class="setting-row">
                     <label>Results view</label>
                     <clr-radio-wrapper>
@@ -34,6 +38,13 @@
                         <label>Compact tree</label>
                     </clr-radio-wrapper>
                 </clr-radio-container>
+            </div>
+            <div formGroupName="electron" *ngIf="appRunningInElectron">
+                <div class="setting-section-title">Other</div>
+                <clr-checkbox-wrapper>
+                    <input clrCheckbox type="checkbox" formControlName="enableUnsafeRequests" />
+                    <label>Enable unsafe HTTPS requests</label>
+                </clr-checkbox-wrapper>
             </div>
         </div>
         <div class="modal-footer">

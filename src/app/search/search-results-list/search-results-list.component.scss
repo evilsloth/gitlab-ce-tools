@@ -30,3 +30,21 @@
 clr-icon {
     flex-shrink: 0;
 }
+
+.label-info, .badge {
+    margin-right: 0;
+}
+
+.hide-icon {
+    margin: 0 5px;
+    display: none;
+}
+
+clr-tree-node {
+    &::ng-deep > .clr-tree-node-content-container:hover {
+        .hide-icon {
+            cursor: pointer;
+            display: inline-block;
+        }
+    }
+}

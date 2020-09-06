@@ -9,4 +9,5 @@ export interface FileTreeLeaf {
     fileSearchResults?: FileSearchResult[];
     leafs?: FileTreeLeaf[];
     expanded?: boolean;
+    hidden?: boolean;
 }
