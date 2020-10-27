@@ -21,11 +21,27 @@
                     {{searchResult.name}}
                 </span>
                 <span class="label label-info">{{searchResult.project.default_branch}}</span>
+                <span class="icon-badge" *ngIf="showFileHitsCount && searchResult.fileHitsCount">
+                    <clr-icon shape="file"></clr-icon>
+                    <span class="badge badge-info results-count">{{searchResult.fileHitsCount}}</span>
+                </span>
+                <span class="icon-badge" *ngIf="showTotalHitsCount && searchResult.totalHitsCount">
+                    <clr-icon shape="crosshairs"></clr-icon>
+                    <span class="badge badge-success results-count">{{searchResult.totalHitsCount}}</span>
+                </span>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
                 <clr-icon shape="folder"></clr-icon>
                 <span class="expandable-name" (click)="toggleExpandLeaf(searchResult)" (dblclick)="expandTree(searchResult)">
                     <app-path-text class="directory-path" [path]="searchResult.name"></app-path-text>
+                </span>
+                <span class="icon-badge" *ngIf="showFileHitsCount && searchResult.fileHitsCount">
+                    <clr-icon shape="file"></clr-icon>
+                    <span class="badge badge-info results-count">{{searchResult.fileHitsCount}}</span>
+                </span>
+                <span class="icon-badge" *ngIf="showTotalHitsCount && searchResult.totalHitsCount">
+                    <clr-icon shape="crosshairs"></clr-icon>
+                    <span class="badge badge-success results-count">{{searchResult.totalHitsCount}}</span>
                 </span>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'FILE'">
@@ -33,8 +49,9 @@
                 <a class="file-link" (click)="onFileSelected(searchResult.filePath, searchResult.project)">
                     <app-path-text class="file-path" [path]="searchResult.name"></app-path-text>
                 </a>
-                <span class="badge badge-success results-count" *ngIf="searchResult.fileSearchResults.length > 1">
-                    {{searchResult.fileSearchResults.length}}
+                <span class="icon-badge" *ngIf="showTotalHitsCount && searchResult.totalHitsCount > 1">
+                    <clr-icon shape="crosshairs"></clr-icon>
+                    <span class="badge badge-success results-count">{{searchResult.totalHitsCount}}</span>
                 </span>
             </ng-container>
             <clr-icon *ngIf="enableResultHiding" class="hide-icon" shape="eye-hide" (click)="hideResult(searchResult)">

@@ -13,6 +13,8 @@ export interface SearchSettings {
     rememberLastSearch: boolean;
     enableResultHiding: boolean;
     searchResultsView: SearchResultsView;
+    showFileHitsCount: boolean;
+    showTotalHitsCount: boolean;
 }
 
 export interface ElectronSettings {
@@ -30,7 +32,9 @@ export function getDefaultSettings(): Settings {
         search: {
             rememberLastSearch: true,
             enableResultHiding: false,
-            searchResultsView: 'FLAT'
+            searchResultsView: 'FLAT',
+            showFileHitsCount: true,
+            showTotalHitsCount: true
         },
         electron: {
             enableUnsafeRequests: false

@@ -66,5 +66,7 @@
 
 <app-search-results-list [searchResults]="searchResultsTree"
                          (fileSelected)="openFile($event)"
-                         [enableResultHiding]="enableResultHiding">
+                         [enableResultHiding]="enableResultHiding"
+                         [showFileHitsCount]="showFileHitsCount"
+                         [showTotalHitsCount]="showTotalHitsCount">
 </app-search-results-list>

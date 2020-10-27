@@ -4,26 +4,28 @@ import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileSearchResult } from 'src/app/core/services/gitlab-api/models/file-search-result';
 
 export function buildCompactFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
-    const tree = buildFileTreeForProject(searchResult);
+    const tree = buildFileTree(searchResult, false);;
     compactTree(tree);
     return tree;
 }
 
-export function buildFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
-    return {
-        project: searchResult.project,
-        type: 'PROJECT',
-        name: searchResult.project.name_with_namespace,
-        leafs: buildLeafs(searchResult, false)
-    };
+export function buildFlatFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
+    return buildFileTree(searchResult, true);
 }
 
-export function buildFlatFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
+export function buildFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
+    return buildFileTree(searchResult, false);
+}
+
+function buildFileTree(searchResult: ProjectSearchResult, flat: boolean): FileTreeLeaf {
+    const leafs = buildLeafs(searchResult, flat);
     return {
         project: searchResult.project,
         type: 'PROJECT',
         name: searchResult.project.name_with_namespace,
-        leafs: buildLeafs(searchResult, true)
+        leafs: leafs,
+        fileHitsCount: leafs.map(leaf => leaf.fileHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount),
+        totalHitsCount: leafs.map(leaf => leaf.totalHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount)
     };
 }
 
@@ -51,7 +53,9 @@ function buildPathTree(remainingPathParts: string[],
             type: 'FILE',
             name: pathPart,
             filePath,
-            fileSearchResults: searchResults
+            fileSearchResults: searchResults,
+            fileHitsCount: 1,
+            totalHitsCount: searchResults.length
         });
         return;
     }
@@ -65,6 +69,9 @@ function buildPathTree(remainingPathParts: string[],
         };
         tree.push(directoryLeaf);
     }
+
+    directoryLeaf.fileHitsCount = (directoryLeaf.fileHitsCount || 0) + 1;
+    directoryLeaf.totalHitsCount = (directoryLeaf.totalHitsCount || 0) + searchResults.length;
 
     buildPathTree(remainingPathParts, directoryLeaf.leafs, project, filePath, searchResults);
 }

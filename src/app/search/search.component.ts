@@ -54,6 +54,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     groupsLoading = false;
     projectsLoading = false;
     enableResultHiding = false;
+    showFileHitsCount = false;
+    showTotalHitsCount = false;
     searchTerms: SearchTerms;
     searchResults: ProjectSearchResult[] = [];
     searchResultsTree: FileTreeLeaf[] = [];
@@ -101,6 +103,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.settingsSubscription = this.settingsService.getSettings().subscribe(settings => {
             this.searchResultsView = settings.search.searchResultsView;
             this.enableResultHiding = settings.search.enableResultHiding;
+            this.showFileHitsCount = settings.search.showFileHitsCount;
+            this.showTotalHitsCount = settings.search.showTotalHitsCount;
             this.rebuildSearchResultsTree();
         });
     }

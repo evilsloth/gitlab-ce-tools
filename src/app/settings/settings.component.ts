@@ -25,7 +25,9 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
         search: this.formBuilder.group({
             rememberLastSearch: [false],
             enableResultHiding: [false],
-            searchResultsView: ['FLAT']
+            searchResultsView: ['FLAT'],
+            showFileHitsCount: [false],
+            showTotalHitsCount: [false]
         }),
         electron: this.formBuilder.group({
             enableUnsafeRequests: [false]

@@ -27,6 +27,12 @@ export class SearchResultsListComponent {
     @Input()
     enableResultHiding: boolean;
 
+    @Input()
+    showFileHitsCount: boolean;
+
+    @Input()
+    showTotalHitsCount: boolean;
+
     @Output()
     fileSelected = new EventEmitter<FileInProject>();
 
