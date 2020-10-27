@@ -4,7 +4,7 @@ import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileSearchResult } from 'src/app/core/services/gitlab-api/models/file-search-result';
 
 export function buildCompactFileTreeForProject(searchResult: ProjectSearchResult): FileTreeLeaf {
-    const tree = buildFileTree(searchResult, false);;
+    const tree = buildFileTree(searchResult, false);
     compactTree(tree);
     return tree;
 }
@@ -23,7 +23,7 @@ function buildFileTree(searchResult: ProjectSearchResult, flat: boolean): FileTr
         project: searchResult.project,
         type: 'PROJECT',
         name: searchResult.project.name_with_namespace,
-        leafs: leafs,
+        leafs,
         fileHitsCount: leafs.map(leaf => leaf.fileHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount),
         totalHitsCount: leafs.map(leaf => leaf.totalHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount)
     };
