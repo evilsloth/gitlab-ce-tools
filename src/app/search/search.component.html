@@ -47,9 +47,9 @@
                     <input clrInput type="text" id="filename" formControlName="searchFilename" size="25">
                     <clr-control-helper>Use * as a wildcard, e.g. *.java, MyFile.*</clr-control-helper>
                 </clr-input-container>
-                <clr-datalist-container>
+                <clr-datalist-container class="search-text-container">
                     <label for="searchText">Search text</label>
-                    <input clrDatalistInput type="text" id="searchText" formControlName="searchText" #searchTextInput size="35" autocomplete="off">
+                    <input clrDatalistInput type="text" id="searchText" formControlName="searchText" #searchTextInput size="45" autocomplete="off">
                     <datalist>
                         <option *ngFor="let item of historyStoreService.history$ | async" [value]="item"></option>
                     </datalist>

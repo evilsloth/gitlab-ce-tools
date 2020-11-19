@@ -4,13 +4,24 @@
 
     > * {
         margin-top: 0;
-        margin-bottom: 15px;
-
-
+        margin-bottom: 10px;
     }
 
     > *:not(:last-child) {
-        margin-right: 20px;
+        margin-right: 15px;
+    }
+
+    .search-text-container::ng-deep {
+        flex-grow: 1;
+        margin-right: 5px;
+
+        .clr-input-group, input {
+            width: 100%;
+        }
+
+        input::-webkit-calendar-picker-indicator {
+            display: none;
+        }
     }
 }
 
