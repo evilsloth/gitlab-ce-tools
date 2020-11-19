@@ -5,6 +5,7 @@ import { SettingsService } from './settings.service';
 import { Subscription } from 'rxjs';
 import { ElectronSettings } from './settings';
 import { IpcRenderer } from 'electron';
+import { HistoryStoreService } from '../core/services/history-store/history-store.service';
 
 @Component({
     selector: 'app-settings',
@@ -24,6 +25,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
         }),
         search: this.formBuilder.group({
             rememberLastSearch: [false],
+            enableSearchHistory: [false],
+            historyElementCount: [10, [Validators.required, Validators.min(0)]],
             enableResultHiding: [false],
             searchResultsView: ['FLAT'],
             showFileHitsCount: [false],
@@ -34,7 +37,10 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
         })
     });
 
-    constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) {
+    constructor(
+        public historyStoreService: HistoryStoreService,
+        private formBuilder: FormBuilder,
+        private settingsService: SettingsService) {
         super();
     }
 

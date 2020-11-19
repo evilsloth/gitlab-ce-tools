@@ -42,3 +42,12 @@
         opacity: 0.7;
     }
 }
+
+clr-datalist-container::ng-deep {
+    flex: none;
+
+    > label, .clr-control-container {
+        flex: none;
+        max-width: 100%;
+    }
+}

@@ -11,6 +11,8 @@ export interface FileViewerSettings {
 
 export interface SearchSettings {
     rememberLastSearch: boolean;
+    enableSearchHistory: boolean;
+    historyElementCount: number;
     enableResultHiding: boolean;
     searchResultsView: SearchResultsView;
     showFileHitsCount: boolean;
@@ -31,6 +33,8 @@ export function getDefaultSettings(): Settings {
         },
         search: {
             rememberLastSearch: true,
+            enableSearchHistory: false,
+            historyElementCount: 10,
             enableResultHiding: false,
             searchResultsView: 'FLAT',
             showFileHitsCount: true,

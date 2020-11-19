@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { ServersService } from '../servers/servers.service';
 import { SearchService } from './search.service';
 import { FormBuilder } from '@angular/forms';
@@ -22,6 +22,7 @@ import {
     buildCompactFileTreeForProject
 } from './search-results-list/tree/file-tree-builder';
 import { SearchResultsView } from '../settings/settings';
+import { HistoryStoreService } from '../core/services/history-store/history-store.service';
 
 enum ProjectsSearchType {
     ALL = 'ALL',
@@ -71,11 +72,15 @@ export class SearchComponent implements OnInit, OnDestroy {
         searchText: ['']
     });
 
+    @ViewChild('searchTextInput')
+    searchTextInput: ElementRef;
+
     private activeServerSubscription: Subscription;
     private projectsSearchTypeSubscription: Subscription;
     private settingsSubscription: Subscription;
 
     constructor(
+        public historyStoreService: HistoryStoreService,
         private serversService: ServersService,
         private groupsApiService: GroupsApiService,
         private projectsApiService: ProjectsApiService,
@@ -137,6 +142,23 @@ export class SearchComponent implements OnInit, OnDestroy {
             error => error,
             () => this.searchInProgress = false
         );
+
+        this.addToSearchHistory(this.searchTerms.searchText);
+    }
+
+    private addToSearchHistory(text: string) {
+        if (!this.searchForm.value.searchText) {
+            return;
+        }
+        const searchTextHasFocus = document.activeElement === this.searchTextInput.nativeElement;
+        if (searchTextHasFocus) {
+            // prevents displaying recently added text to history just after enter press
+            this.searchTextInput.nativeElement.blur();
+        }
+        this.historyStoreService.add(this.searchForm.value.searchText);
+        if (searchTextHasFocus) {
+            setTimeout(() =>  this.searchTextInput.nativeElement.focus());
+        }
     }
 
     private subscribeToProjectsToSearch() {
