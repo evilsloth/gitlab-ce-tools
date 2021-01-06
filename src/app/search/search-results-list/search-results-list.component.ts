@@ -22,6 +22,8 @@ export class SearchResultsListComponent {
     set searchResults(value: FileTreeLeaf[]) {
         this._searchResults = value;
         this.isAnyResultHidden = false;
+        this.treeFileHitsCount = value.reduce((sum, leaf) => sum + leaf.fileHitsCount, 0);
+        this.treeTotalHitsCount = value.reduce((sum, leaf) => sum + leaf.totalHitsCount, 0);
     }
 
     @Input()
@@ -37,6 +39,9 @@ export class SearchResultsListComponent {
     fileSelected = new EventEmitter<FileInProject>();
 
     isAnyResultHidden = false;
+
+    treeFileHitsCount = 0;
+    treeTotalHitsCount = 0;
 
     constructor() { }
 

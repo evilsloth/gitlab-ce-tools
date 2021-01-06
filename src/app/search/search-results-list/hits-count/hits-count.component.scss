@@ -1,0 +1,20 @@
+.icon-badge {
+    margin-left: 2px;
+
+    clr-icon {
+        width: 18px;
+        height: 18px;
+        margin-top: -6px;
+        margin-right: 0;
+        opacity: 0.6;
+    }
+
+    .badge {
+        position: relative;
+        margin-left: -12px;
+        margin-bottom: -4px;
+        height: 0.6rem;
+        min-width: 0.6rem;
+        margin-right: 0;
+    }
+}
