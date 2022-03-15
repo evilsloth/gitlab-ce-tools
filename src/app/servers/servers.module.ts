@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
     declarations: [AddServerModalComponent],
     imports: [
         SharedModule
-    ],
-    entryComponents: [AddServerModalComponent]
+    ]
 })
 export class ServersModule { }

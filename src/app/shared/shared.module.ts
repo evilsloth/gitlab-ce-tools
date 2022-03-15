@@ -31,7 +31,6 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
         ServerNotSelectedAlertComponent,
         AlertsComponent,
         PathTextComponent,
-
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
@@ -43,7 +42,6 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
             provide: ACE_CONFIG,
             useValue: DEFAULT_ACE_CONFIG
         }
-    ],
-    entryComponents: [FileViewerComponent, ConfirmationDialogComponent]
+    ]
 })
 export class SharedModule { }

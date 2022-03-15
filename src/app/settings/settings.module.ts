@@ -6,7 +6,6 @@ import { SettingsComponent } from './settings.component';
     declarations: [SettingsComponent],
     imports: [
         SharedModule
-    ],
-    entryComponents: [SettingsComponent]
+    ]
 })
 export class SettingsModule { }
