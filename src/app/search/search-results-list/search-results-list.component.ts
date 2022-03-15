@@ -3,7 +3,7 @@ import { FileInProject } from './file-in-project';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { FileTreeLeaf } from './tree/file-tree-leaf';
 import { Observable, of, scheduled } from 'rxjs';
-import { async } from 'rxjs/internal/scheduler/async';
+import { asyncScheduler } from 'rxjs/internal/scheduler/async';
 
 @Component({
     selector: 'app-search-results-list',
@@ -46,7 +46,7 @@ export class SearchResultsListComponent {
     constructor() { }
 
     getChildren(leaf: FileTreeLeaf): Observable<FileTreeLeaf[]> {
-        return leaf.leafs ? scheduled(of(leaf.leafs), async) : null;
+        return leaf.leafs ? scheduled(of(leaf.leafs), asyncScheduler) : null;
     }
 
     onFileSelected(filename: string, project: Project): void {

@@ -42,8 +42,9 @@ ace::ng-deep {
             border-radius: 0;
         }
 
-        .modal-dialog, .modal-content-wrapper, .modal-content {
+        .modal-dialog, .modal-content-wrapper, .modal-content, .modal-body-wrapper {
             height: 100%;
+            max-height: none;
         }
 
         .modal {
