@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Prevents event propagation so click is only received by the button and not its container.
+     *
      * @param event event to stop propagation of
      */
     private stopEventPropagation(event: Event) {

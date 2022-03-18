@@ -1,6 +1,6 @@
-import { mergeMap, map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { of, zip, Observable } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 export function mergePages(dataProvider: (url: URL) => Observable<HttpResponse<any[]>>, url: URL): Observable<any[]> {
     return dataProvider(url).pipe(mergeMap((response: HttpResponse<any>) => {

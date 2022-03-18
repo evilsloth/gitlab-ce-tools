@@ -9,12 +9,13 @@ export class HistoryStoreService {
 
     private static readonly STORAGE_KEY = 'history';
 
+    history$: Observable<string[]>;
+
     private enabled: boolean;
 
     private limit: number;
 
     private historySubject: BehaviorSubject<string[]>;
-    history$: Observable<string[]>;
 
     constructor(private settingsService: SettingsService) {
         const history = this.getHistoryFromStorage();

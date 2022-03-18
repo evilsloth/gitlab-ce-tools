@@ -44,6 +44,9 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         ['properties', 'properties']
     ]);
 
+    @HostBinding('class.fullscreen')
+    fullScreen = false;
+
     @ViewChild('ace', { static: true })
     ace: AceComponent;
     aceConfig: AceConfigInterface;
@@ -58,9 +61,6 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
 
     highlightedRanges: Range[] = [];
     jumpedToLineIndex = -1;
-
-    @HostBinding('class.fullscreen')
-    fullScreen = false;
 
     constructor(private filesApiService: FilesApiService, private settingsService: SettingsService) {
         super();

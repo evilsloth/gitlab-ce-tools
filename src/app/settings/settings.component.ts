@@ -16,8 +16,6 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
 
     appRunningInElectron = this.isAppRunningInElectron();
 
-    private settingsSubscription: Subscription;
-
     settingsForm = this.formBuilder.group({
         fileViewer: this.formBuilder.group({
             fullScreen: [false],
@@ -36,6 +34,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
             enableUnsafeRequests: [false]
         })
     });
+
+    private settingsSubscription: Subscription;
 
     constructor(
         public historyStoreService: HistoryStoreService,

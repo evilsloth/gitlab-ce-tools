@@ -47,6 +47,10 @@ interface SearchTerms {
 export class SearchComponent implements OnInit, OnDestroy {
     private static readonly SEARCH_SAVE_STORAGE_KEY = 'saved_search';
     private static readonly ALL_GROUPS_ID = '-1';
+
+    @ViewChild('searchTextInput')
+    searchTextInput: ElementRef;
+
     ProjectsSearchType = ProjectsSearchType;
 
     server: Server;
@@ -71,9 +75,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         searchFilename: [''],
         searchText: ['']
     });
-
-    @ViewChild('searchTextInput')
-    searchTextInput: ElementRef;
 
     private activeServerSubscription: Subscription;
     private projectsSearchTypeSubscription: Subscription;

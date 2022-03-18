@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-path-text',
@@ -9,12 +9,12 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 export class PathTextComponent {
     breakedPath = '';
 
+    constructor() {}
+
     @Input()
     set path(value: string) {
         this.breakedPath = this.addBreaksAfterSlashes(value);
     }
-
-    constructor() {}
 
     private addBreaksAfterSlashes(value: string): string {
         return value.replace(new RegExp('/', 'g'), '/<wbr>');

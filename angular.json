@@ -23,7 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "allowedCommonJsDependencies": [
-                "brace"
+              "brace"
             ],
             "assets": [
               "src/favicon.ico",
@@ -109,6 +109,15 @@
               "src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -132,5 +141,8 @@
       }
     }
   },
-  "defaultProject": "gitlab-ce-tools"
+  "defaultProject": "gitlab-ce-tools",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }

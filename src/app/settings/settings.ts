@@ -48,6 +48,7 @@ export function getDefaultSettings(): Settings {
 
 /**
  * Patches missing settings properties with default ones which easies adding new settings properties to new app releases.
+ *
  * @param settings settings to patch
  */
 export function getSettingsPatchedWithDefaults(settings: Settings) {
