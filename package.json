@@ -72,7 +72,7 @@
     "@types/prismjs": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "5.11.0",
     "@typescript-eslint/parser": "5.11.0",
-    "electron": "^8.5.3",
+    "electron": "^13.6.6",
     "electron-builder": "^22.8.0",
     "eslint": "^8.2.0",
     "eslint-plugin-import": "latest",
