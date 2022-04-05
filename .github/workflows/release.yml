@@ -24,6 +24,6 @@ jobs:
               uses: samuelmeuli/action-electron-builder@v1
               with:
                   build_script_name: build-electron
-                  args: "-wl -c.snap.publish=github"
+                  args: "-c.snap.publish=github"
                   github_token: ${{ secrets.github_token }}
                   release: true
