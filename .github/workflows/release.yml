@@ -1,0 +1,29 @@
+name: Build/release Electron packages
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+    release:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup nodejs
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "16.x"
+
+            - name: Build/release Electron packages
+              uses: samuelmeuli/action-electron-builder@v1
+              with:
+                  build_script_name: build-electron
+                  args: "-wl -c.snap.publish=github"
+                  github_token: ${{ secrets.github_token }}
+                  release: true
