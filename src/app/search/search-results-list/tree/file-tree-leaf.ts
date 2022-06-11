@@ -10,6 +10,6 @@ export interface FileTreeLeaf {
     leafs?: FileTreeLeaf[];
     expanded?: boolean;
     hidden?: boolean;
-    fileHitsCount?: number;
-    totalHitsCount?: number;
+    getFileHitsCount: () => number;
+    getTotalHitsCount: () => number;
 }

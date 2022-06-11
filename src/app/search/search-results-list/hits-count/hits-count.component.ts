@@ -8,10 +8,13 @@ import { Component, Input } from '@angular/core';
 export class HitsCountComponent {
 
     @Input()
-    fileHitsCount: number;
+    fileHitsCount?: number;
 
     @Input()
-    totalHitsCount: number;
+    totalHitsCount?: number;
+
+    @Input()
+    showForSingleHit = true;
 
     constructor() { }
 

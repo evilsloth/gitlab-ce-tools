@@ -1,8 +1,8 @@
-<span class="icon-badge" *ngIf="fileHitsCount">
+<span class="icon-badge" *ngIf="fileHitsCount && (showForSingleHit || fileHitsCount > 1)">
     <clr-icon shape="file"></clr-icon>
     <span class="badge badge-info results-count">{{fileHitsCount}}</span>
 </span>
-<span class="icon-badge" *ngIf="totalHitsCount">
+<span class="icon-badge" *ngIf="totalHitsCount && (showForSingleHit || totalHitsCount > 1)">
     <clr-icon shape="crosshairs"></clr-icon>
     <span class="badge badge-success results-count">{{totalHitsCount}}</span>
 </span>

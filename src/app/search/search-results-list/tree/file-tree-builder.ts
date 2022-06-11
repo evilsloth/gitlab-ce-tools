@@ -24,8 +24,18 @@ function buildFileTree(searchResult: ProjectSearchResult, flat: boolean): FileTr
         type: 'PROJECT',
         name: searchResult.project.name_with_namespace,
         leafs,
-        fileHitsCount: leafs.map(leaf => leaf.fileHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount),
-        totalHitsCount: leafs.map(leaf => leaf.totalHitsCount).reduce((prevCount, currentCount) => prevCount + currentCount)
+        getFileHitsCount() {
+            return this.leafs
+                .filter(leaf => !leaf.hidden)
+                .map(leaf => leaf.getFileHitsCount())
+                .reduce((prevCount, currentCount) => prevCount + currentCount, 0);
+        },
+        getTotalHitsCount() {
+            return this.leafs
+                .filter(leaf => !leaf.hidden)
+                .map(leaf => leaf.getTotalHitsCount())
+                .reduce((prevCount, currentCount) => prevCount + currentCount, 0);
+        }
     };
 }
 
@@ -54,8 +64,8 @@ function buildPathTree(remainingPathParts: string[],
             name: pathPart,
             filePath,
             fileSearchResults: searchResults,
-            fileHitsCount: 1,
-            totalHitsCount: searchResults.length
+            getFileHitsCount: () =>  1,
+            getTotalHitsCount: () => searchResults.length
         });
         return;
     }
@@ -65,13 +75,22 @@ function buildPathTree(remainingPathParts: string[],
         directoryLeaf = {
             type: 'DIRECTORY',
             name: pathPart,
-            leafs: []
+            leafs: [],
+            getFileHitsCount() {
+                return this.leafs
+                    .filter(leaf => !leaf.hidden)
+                    .map(leaf => leaf.getFileHitsCount())
+                    .reduce((prevCount, currentCount) => prevCount + currentCount, 0);
+            },
+            getTotalHitsCount() {
+                return this.leafs
+                    .filter(leaf => !leaf.hidden)
+                    .map(leaf => leaf.getTotalHitsCount())
+                    .reduce((prevCount, currentCount) => prevCount + currentCount, 0);
+            }
         };
         tree.push(directoryLeaf);
     }
-
-    directoryLeaf.fileHitsCount = (directoryLeaf.fileHitsCount || 0) + 1;
-    directoryLeaf.totalHitsCount = (directoryLeaf.totalHitsCount || 0) + searchResults.length;
 
     buildPathTree(remainingPathParts, directoryLeaf.leafs, project, filePath, searchResults);
 }

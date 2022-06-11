@@ -7,6 +7,10 @@
     &:hover {
         color: #666;
     }
+
+    > clr-icon {
+        color: black;
+    }
 }
 
 .dropdown-buttons {
@@ -16,4 +20,10 @@
     > .dropdown-icon-button:not(:last-child) {
         margin-right: 10px;
     }
+}
+
+.caret-icon {
+    right: 0.3rem !important;
+    height: 0.8rem !important;
+    width: 0.8rem !important;
 }

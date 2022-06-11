@@ -12,8 +12,8 @@
         Reset hidden results
     </button>
     <app-hits-count
-        [fileHitsCount]="showFileHitsCount ? treeFileHitsCount : 0"
-        [totalHitsCount]="showTotalHitsCount ? treeTotalHitsCount : 0">
+        [fileHitsCount]="showFileHitsCount ? treeFileHitsCount : null"
+        [totalHitsCount]="showTotalHitsCount ? treeTotalHitsCount : null">
     </app-hits-count>
     <clr-tree [clrLazy]="true">
         <clr-tree-node *clrRecursiveFor="let searchResult of searchResults; getChildren: getChildren"
@@ -26,8 +26,8 @@
                 </span>
                 <span class="label label-info">{{searchResult.project.default_branch}}</span>
                 <app-hits-count
-                    [fileHitsCount]="showFileHitsCount ? searchResult.fileHitsCount : 0"
-                    [totalHitsCount]="showTotalHitsCount ? searchResult.totalHitsCount : 0">
+                    [fileHitsCount]="showFileHitsCount ? searchResult.getFileHitsCount() : null"
+                    [totalHitsCount]="showTotalHitsCount ? searchResult.getTotalHitsCount() : null">
                 </app-hits-count>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'DIRECTORY'">
@@ -36,8 +36,8 @@
                     <app-path-text class="directory-path" [path]="searchResult.name"></app-path-text>
                 </span>
                 <app-hits-count
-                    [fileHitsCount]="showFileHitsCount ? searchResult.fileHitsCount : 0"
-                    [totalHitsCount]="showTotalHitsCount ? searchResult.totalHitsCount : 0">
+                    [fileHitsCount]="showFileHitsCount ? searchResult.getFileHitsCount() : null"
+                    [totalHitsCount]="showTotalHitsCount ? searchResult.getTotalHitsCount() : null">
                 </app-hits-count>
             </ng-container>
             <ng-container *ngIf="searchResult.type === 'FILE'">
@@ -46,7 +46,8 @@
                     <app-path-text class="file-path" [path]="searchResult.name"></app-path-text>
                 </a>
                 <app-hits-count
-                    [totalHitsCount]="showTotalHitsCount && searchResult.totalHitsCount > 1 ? searchResult.totalHitsCount : 0">
+                    [showForSingleHit]="false"
+                    [totalHitsCount]="showTotalHitsCount ? searchResult.getTotalHitsCount() : null">
                 </app-hits-count>
             </ng-container>
             <clr-icon *ngIf="enableResultHiding" class="hide-icon" shape="eye-hide" (click)="hideResult(searchResult)">

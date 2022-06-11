@@ -40,8 +40,7 @@ export class SearchResultsListComponent {
     set searchResults(value: FileTreeLeaf[]) {
         this._searchResults = value;
         this.isAnyResultHidden = false;
-        this.treeFileHitsCount = value.reduce((sum, leaf) => sum + leaf.fileHitsCount, 0);
-        this.treeTotalHitsCount = value.reduce((sum, leaf) => sum + leaf.totalHitsCount, 0);
+        this.updateHitsSummary(value);
     }
 
     getChildren(leaf: FileTreeLeaf): Observable<FileTreeLeaf[]> {
@@ -77,11 +76,13 @@ export class SearchResultsListComponent {
     hideResult(leaf: FileTreeLeaf) {
         leaf.hidden = true;
         this.isAnyResultHidden = true;
+        this.updateHitsSummary(this._searchResults);
     }
 
     clearHidden() {
         this.searchResults.forEach(leaf => this.clearTreeHiddenFlag(leaf));
         this.isAnyResultHidden = false;
+        this.updateHitsSummary(this._searchResults);
     }
 
     private setTreeExpanded(leaf: FileTreeLeaf, expanded: boolean): void {
@@ -90,6 +91,11 @@ export class SearchResultsListComponent {
 
     private clearTreeHiddenFlag(leaf: FileTreeLeaf): void {
         this.setTreeProperties(leaf, { hidden: false });
+    }
+
+    private updateHitsSummary(results: FileTreeLeaf[]) {
+        this.treeFileHitsCount = results.filter(leaf => !leaf.hidden).reduce((sum, leaf) => sum + leaf.getFileHitsCount(), 0);
+        this.treeTotalHitsCount = results.filter(leaf => !leaf.hidden).reduce((sum, leaf) => sum + leaf.getTotalHitsCount(), 0);
     }
 
     /**

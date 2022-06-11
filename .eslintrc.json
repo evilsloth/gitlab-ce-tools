@@ -31,6 +31,7 @@
           "off",
           "always"
         ],
+        "arrow-body-style": "off",
         "import/order": "off",
         "@typescript-eslint/naming-convention": "off",
         "no-underscore-dangle": "off",
