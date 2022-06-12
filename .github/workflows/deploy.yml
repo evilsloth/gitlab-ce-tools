@@ -31,9 +31,8 @@ jobs:
 
             - name: Install Dependencies
               if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-              # --force needed because of npm bug/breaking change https://github.com/npm/cli/issues/4998
               run: |
-                  npm ci --force
+                  npm ci
 
             - name: Build
               run: |

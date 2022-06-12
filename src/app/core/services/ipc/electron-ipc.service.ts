@@ -12,7 +12,7 @@ export class ElectronIpcService {
 
     constructor() {
         this._isElectron = this.isAppRunningInElectron();
-        if (this.isElectron) {
+        if (this._isElectron) {
             this.ipcRenderer = this.getIpcRenderer();
         }
     }
