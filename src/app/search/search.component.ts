@@ -23,6 +23,8 @@ import {
 } from './search-results-list/tree/file-tree-builder';
 import { SearchResultsView } from '../settings/settings';
 import { HistoryStoreService } from '../core/services/history-store/history-store.service';
+import { IpcRenderer } from 'electron';
+import { ElectronIpcService } from '../core/services/ipc/electron-ipc.service';
 
 enum ProjectsSearchType {
     ALL = 'ALL',
@@ -88,7 +90,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private formBuilder: FormBuilder,
         private modalService: ModalService,
-        private settingsService: SettingsService
+        private settingsService: SettingsService,
+        private electronIpcService: ElectronIpcService
     ) {
         this.projectsSearchTypeSubscription = this.subscribeToProjectsToSearch();
     }
@@ -182,6 +185,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     private makeSearch(terms: SearchTerms): Observable<ProjectSearchResult> {
         this.saveSearch(this.server.name, terms);
+        this.electronIpcService.sendToHost('SEARCH_MADE', terms);
 
         if (terms.projectsSearchType === ProjectsSearchType.ALL) {
             return this.searchService.searchInGroup(terms.group, undefined, terms.searchText, terms.searchFilename);

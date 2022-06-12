@@ -168,13 +168,21 @@ function buildMenu() {
 }
 
 function createWindow() {
-    win = new BrowserWindow({ width: 1280, height: 720, webPreferences: { nodeIntegration: true } });
+    win = new BrowserWindow({
+        width: 1280,
+        height: 720,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            webviewTag: true
+        }
+    });
     menu = buildMenu();
 
     Menu.setApplicationMenu(menu);
 
     // load the index file from dist folder
-    win.loadFile(path.join(__dirname, `/dist/gitlab-ce-tools/index.html`));
+    win.loadFile(path.join(__dirname, 'index.html'));
 
     // The following is optional and will open the DevTools:
     // win.webContents.openDevTools()

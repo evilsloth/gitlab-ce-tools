@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ElectronSettings } from './settings';
 import { IpcRenderer } from 'electron';
 import { HistoryStoreService } from '../core/services/history-store/history-store.service';
+import { ElectronIpcService } from '../core/services/ipc/electron-ipc.service';
 
 @Component({
     selector: 'app-settings',
@@ -14,7 +15,7 @@ import { HistoryStoreService } from '../core/services/history-store/history-stor
 })
 export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
 
-    appRunningInElectron = this.isAppRunningInElectron();
+    appRunningInElectron: boolean;
 
     settingsForm = this.formBuilder.group({
         fileViewer: this.formBuilder.group({
@@ -40,8 +41,11 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
     constructor(
         public historyStoreService: HistoryStoreService,
         private formBuilder: FormBuilder,
-        private settingsService: SettingsService) {
+        private settingsService: SettingsService,
+        private electronIpcService: ElectronIpcService
+    ) {
         super();
+        this.appRunningInElectron = electronIpcService.isElectron();
     }
 
     ngOnInit() {
@@ -55,29 +59,9 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
 
     save() {
         this.settingsService.updateSettings(this.settingsForm.value);
-        if (this.appRunningInElectron) {
-            this.sendChangedSettingsToElectron(this.settingsForm.value.electron);
-        }
+        this.electronIpcService.send('SETTINGS_CHANGED', this.settingsForm.value.electron);
 
         this.close();
-    }
-
-    private isAppRunningInElectron(): boolean {
-        const userAgent = navigator.userAgent.toLowerCase();
-        return userAgent.indexOf(' electron/') > -1;
-    }
-
-    private sendChangedSettingsToElectron(electronSettings: ElectronSettings) {
-        if (window.require) {
-            try {
-                const ipcRenderer: IpcRenderer = window.require('electron').ipcRenderer;
-                ipcRenderer.send('SETTINGS_CHANGED', electronSettings);
-            } catch (e) {
-                throw e;
-            }
-        } else {
-            console.warn('Electron\'s IPC could not be loaded!');
-        }
     }
 
 }

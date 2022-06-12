@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Gitlab CE Tools</title>
+</head>
+<body style="margin: 0">
+
+<tab-group new-tab-button="true" sortable="true"></tab-group>
+
+<script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
+<script>
+  const tabGroup = document.querySelector("tab-group");
+
+  const tabProperties = {
+    title: 'New tab',
+    src: 'dist/gitlab-ce-tools/index.html',
+    active: true,
+    webviewAttributes: {
+        nodeintegration: true,
+        webPreferences: 'contextIsolation=false'
+    },
+    ready: (tab) => {
+        tab.webview.addEventListener('ipc-message', (event) => {
+            if (event.channel === 'SEARCH_MADE') {
+                const searchText = event.args[0].searchText;
+                tab.setTitle('Search: ' + (searchText.length > 20 ? searchText.substr(0, 20) + '...' : searchText));
+            }
+        });
+    }
+  };
+
+  tabGroup.addTab(tabProperties);
+  tabGroup.setDefaultTab(tabProperties);
+</script>
+</body>
+</html>

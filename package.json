@@ -12,7 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build --base-href \"\" && electron .",
+    "electron": "ng build --base-href \"\" && electron . ",
     "electron-pack": "ng build --base-href \"\" && electron-builder --dir",
     "electron-dist": "ng build --base-href \"\" && electron-builder -wl -c.snap.publish=github"
   },
@@ -21,6 +21,8 @@
     "appId": "com.github.gitlab-ce-tools",
     "artifactName": "gitlab-ce-tools.${version}.${ext}",
     "files": [
+      "index.html",
+      "node_modules/electron-tabs/dist/**/*",
       "main.js",
       "dist/gitlab-ce-tools/**/*"
     ],
@@ -50,6 +52,7 @@
     "core-js": "^2.6.11",
     "electron-log": "^3.0.9",
     "electron-store": "^6.0.0",
+    "electron-tabs": "^1.0.1",
     "electron-updater": "^4.3.4",
     "lit-html": "^2.2.1",
     "ngx-ace-wrapper": "^8.0.0",
