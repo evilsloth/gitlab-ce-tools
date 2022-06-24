@@ -24,9 +24,9 @@ import 'brace/theme/chrome';
 import 'brace/ext/searchbox';
 
 @Component({
-  selector: 'app-file-viewer',
-  templateUrl: './file-viewer.component.html',
-  styleUrls: ['./file-viewer.component.scss']
+    selector: 'app-file-viewer',
+    templateUrl: './file-viewer.component.html',
+    styleUrls: ['./file-viewer.component.scss']
 })
 export class FileViewerComponent extends Modal<FileViewerInitData> implements OnInit, AfterViewInit {
     private static readonly EXTENSION_HIGHLIGHT_MAP = new Map([
@@ -83,7 +83,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         this.filesApiService.getFile(this.project.id, this.project.default_branch, this.filename)
             .subscribe(
                 file => {
-                    this.fileContent = atob(file.content);
+                    this.fileContent = this.decodeContent(file.content);
                     this.highlightLanguage = this.getHightlightLanguage(file.file_name);
                     this.fileLoaded = true;
                     this.onFileLoaded();
@@ -110,7 +110,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     private goToHighlight(index: number): void {
         const range = this.highlightedRanges[index];
         const ace = this.ace.directiveRef.ace();
-        ace.scrollToLine(range.start.row + 1, true, true, () => {});
+        ace.scrollToLine(range.start.row + 1, true, true, () => { });
         ace.gotoLine(range.start.row + 1, range.end.column, true);
     }
 
@@ -135,7 +135,11 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     }
 
     private getHightlightLanguage(filename: string) {
-        const extension =  filename.split('.').pop();
+        const extension = filename.split('.').pop();
         return FileViewerComponent.EXTENSION_HIGHLIGHT_MAP.get(extension) || 'text';
+    }
+
+    private decodeContent(content: string): string {
+        return decodeURIComponent(escape(atob(content)));
     }
 }
