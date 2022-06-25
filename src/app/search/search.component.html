@@ -67,6 +67,8 @@
     <clr-progress-bar clrLoop *ngIf="searchInProgress"></clr-progress-bar>
 </div>
 
+<clr-alert clrAlertType="info" [clrAlertClosable]="false" *ngIf="noResults">Nothing was found!</clr-alert>
+
 <app-search-results-list [searchResults]="searchResultsTree"
                          (fileSelected)="openFile($event)"
                          [enableResultHiding]="enableResultHiding"

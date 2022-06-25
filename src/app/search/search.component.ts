@@ -69,6 +69,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     searchResultsView: SearchResultsView;
     searchSubscription: Subscription;
     searchInProgress = false;
+    noResults = false;
     searchForm = this.formBuilder.group({
         group: [SearchComponent.ALL_GROUPS_ID],
         projectsSearchType: [ProjectsSearchType.ALL],
@@ -131,6 +132,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     search(): void {
         this.searchInProgress = true;
+        this.noResults = false;
         this.searchResults = [];
         this.searchResultsTree = [];
 
@@ -144,7 +146,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchSubscription = this.makeSearch(this.searchTerms).subscribe(
             searchResult => this.onResultForProjectReceived(searchResult),
             error => error,
-            () => this.searchInProgress = false
+            () => {
+                this.searchInProgress = false;
+                this.noResults = this.searchResults.length === 0;
+            }
         );
 
         this.addToSearchHistory(this.searchTerms.searchText);
@@ -209,6 +214,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchResultsTree = [];
         this.cancelSearch();
         this.searchInProgress = false;
+        this.noResults = false;
 
         this.searchForm.setValue({
             group: SearchComponent.ALL_GROUPS_ID,
