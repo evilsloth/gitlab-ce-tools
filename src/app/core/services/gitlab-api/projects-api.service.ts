@@ -12,14 +12,17 @@ import { mergePages } from 'src/app/shared/utils/merge-pages';
 export class ProjectsApiService {
     constructor(private baseApiService: BaseApiService, private http: HttpClient) {}
 
-    getProjects(projectNameFilterTerm?: string): Observable<Project[]> {
+    getProjects(includeArchived: boolean, projectNameFilterTerm?: string): Observable<Project[]> {
         const url = this.baseApiService.getUrl('projects');
         url.searchParams.set('membership', 'true');
         url.searchParams.set('per_page', '100');
-        url.searchParams.set('simple', 'true');
 
         if (projectNameFilterTerm) {
             url.searchParams.set('search', projectNameFilterTerm);
+        }
+
+        if (!includeArchived) {
+            url.searchParams.set('archived', 'false');
         }
 
         return mergePages(projectsUrl => this.http.get<Project[]>(projectsUrl.href, { observe: 'response' }), url);

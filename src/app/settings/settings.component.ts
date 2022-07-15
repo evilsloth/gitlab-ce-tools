@@ -3,8 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Modal } from '../core/services/modal/modal';
 import { SettingsService } from './settings.service';
 import { Subscription } from 'rxjs';
-import { ElectronSettings } from './settings';
-import { IpcRenderer } from 'electron';
 import { HistoryStoreService } from '../core/services/history-store/history-store.service';
 import { ElectronIpcService } from '../core/services/ipc/electron-ipc.service';
 
@@ -29,7 +27,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
             enableResultHiding: [false],
             searchResultsView: ['FLAT'],
             showFileHitsCount: [false],
-            showTotalHitsCount: [false]
+            showTotalHitsCount: [false],
+            includeArchived: [false]
         }),
         electron: this.formBuilder.group({
             enableUnsafeRequests: [false]

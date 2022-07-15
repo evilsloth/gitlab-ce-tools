@@ -18,5 +18,8 @@
       "dom"
     ],
     "downlevelIteration": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   }
 }

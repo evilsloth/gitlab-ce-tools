@@ -15,9 +15,9 @@ export class SearchService {
 
     constructor(private groupsApiService: GroupsApiService, private projectsApiService: ProjectsApiService) {}
 
-    searchInGroup(groupId: string|number, projectNameFilterTerm?: string, searchText?: string,
+    searchInGroup(groupId: string|number, includeArchived: boolean, projectNameFilterTerm?: string, searchText?: string,
                   searchFilename?: string): Observable<ProjectSearchResult> {
-        return this.searchProjects(groupId, projectNameFilterTerm)
+        return this.searchProjects(groupId, includeArchived, projectNameFilterTerm)
             .pipe(mergeMap(projects => {
                 const projectsSearch$ = projects.map(project => this.searchInProject(project, searchText, searchFilename));
                 return merge(...projectsSearch$);
@@ -28,11 +28,11 @@ export class SearchService {
         return merge(...projects.map(project => this.searchInProject(project, searchText, searchFilename)));
     }
 
-    private searchProjects(groupId: string|number, projectNameFilterTerm?: string) {
+    private searchProjects(groupId: string|number,  includeArchived: boolean, projectNameFilterTerm?: string) {
         if (groupId.toString() === SearchService.ALL_GROUPS_SEARCH_ID) {
-            return this.projectsApiService.getProjects(projectNameFilterTerm);
+            return this.projectsApiService.getProjects(includeArchived, projectNameFilterTerm);
         } else {
-            return this.groupsApiService.getProjectsOfGroupDeep(groupId, projectNameFilterTerm);
+            return this.groupsApiService.getProjectsOfGroupDeep(groupId, includeArchived, projectNameFilterTerm);
         }
     }
 

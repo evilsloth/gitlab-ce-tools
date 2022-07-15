@@ -23,7 +23,6 @@ import {
 } from './search-results-list/tree/file-tree-builder';
 import { SearchResultsView } from '../settings/settings';
 import { HistoryStoreService } from '../core/services/history-store/history-store.service';
-import { IpcRenderer } from 'electron';
 import { ElectronIpcService } from '../core/services/ipc/electron-ipc.service';
 
 enum ProjectsSearchType {
@@ -63,6 +62,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     enableResultHiding = false;
     showFileHitsCount = false;
     showTotalHitsCount = false;
+    includeArchivedProjects = false;
     searchTerms: SearchTerms;
     searchResults: ProjectSearchResult[] = [];
     searchResultsTree: FileTreeLeaf[] = [];
@@ -115,6 +115,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.enableResultHiding = settings.search.enableResultHiding;
             this.showFileHitsCount = settings.search.showFileHitsCount;
             this.showTotalHitsCount = settings.search.showTotalHitsCount;
+            this.includeArchivedProjects = settings.search.includeArchived;
             this.rebuildSearchResultsTree();
         });
     }
@@ -143,7 +144,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
 
         this.searchTerms = this.searchForm.value;
-        this.searchSubscription = this.makeSearch(this.searchTerms).subscribe(
+        this.searchSubscription = this.makeSearch(this.searchTerms, this.includeArchivedProjects).subscribe(
             searchResult => this.onResultForProjectReceived(searchResult),
             error => error,
             () => {
@@ -188,24 +189,25 @@ export class SearchComponent implements OnInit, OnDestroy {
         );
     }
 
-    private makeSearch(terms: SearchTerms): Observable<ProjectSearchResult> {
+    private makeSearch(terms: SearchTerms, includeArchived: boolean): Observable<ProjectSearchResult> {
         this.saveSearch(this.server.name, terms);
         this.electronIpcService.sendToHost('SEARCH_MADE', terms);
 
         if (terms.projectsSearchType === ProjectsSearchType.ALL) {
-            return this.searchService.searchInGroup(terms.group, undefined, terms.searchText, terms.searchFilename);
+            return this.searchService.searchInGroup(terms.group, includeArchived, undefined, terms.searchText, terms.searchFilename);
         } else if (terms.projectsSearchType === ProjectsSearchType.SELECTED) {
             return this.searchService.searchInProjects(terms.projects, terms.searchText, terms.searchFilename);
         } else {
-            return this.searchService.searchInGroup(terms.group, terms.projectName, terms.searchText, terms.searchFilename);
+            return this.searchService.searchInGroup(terms.group, includeArchived, terms.projectName, terms.searchText,
+                terms.searchFilename);
         }
     }
 
     private getProjectsOfGroup(groupId: string) {
         if (groupId === SearchComponent.ALL_GROUPS_ID) {
-            return this.projectsApiService.getProjects();
+            return this.projectsApiService.getProjects(this.includeArchivedProjects);
         } else {
-            return this.groupsApiService.getProjectsOfGroupDeep(groupId);
+            return this.groupsApiService.getProjectsOfGroupDeep(groupId, this.includeArchivedProjects);
         }
     }
 

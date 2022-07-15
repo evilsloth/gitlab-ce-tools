@@ -17,6 +17,7 @@ export interface SearchSettings {
     searchResultsView: SearchResultsView;
     showFileHitsCount: boolean;
     showTotalHitsCount: boolean;
+    includeArchived: boolean;
 }
 
 export interface ElectronSettings {
@@ -38,7 +39,8 @@ export function getDefaultSettings(): Settings {
             enableResultHiding: false,
             searchResultsView: 'FLAT',
             showFileHitsCount: true,
-            showTotalHitsCount: true
+            showTotalHitsCount: true,
+            includeArchived: false
         },
         electron: {
             enableUnsafeRequests: false

@@ -25,6 +25,7 @@
                     {{searchResult.name}}
                 </span>
                 <span class="label label-info">{{searchResult.project.default_branch}}</span>
+                <span class="label label-danger" *ngIf="searchResult.project.archived">Archived</span>
                 <app-hits-count
                     [fileHitsCount]="showFileHitsCount ? searchResult.getFileHitsCount() : null"
                     [totalHitsCount]="showTotalHitsCount ? searchResult.getTotalHitsCount() : null">
