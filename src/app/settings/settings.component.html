@@ -2,82 +2,96 @@
     <clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()">
         <h3 class="modal-title">Settings</h3>
         <div class="modal-body">
-            <div formGroupName="fileViewer">
-                <div class="setting-section-title">File viewer</div>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="fullScreen" />
-                    <label>Full screen window</label>
-                </clr-checkbox-wrapper>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="wrapLines" />
-                    <label>Wrap long lines</label>
-                </clr-checkbox-wrapper>
-            </div>
-            <div formGroupName="search">
-                <div class="setting-section-title">Search</div>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="rememberLastSearch" />
-                    <label>Remember last search</label>
-                </clr-checkbox-wrapper>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="enableSearchHistory" />
-                    <label>Enable search history</label>
-                </clr-checkbox-wrapper>
-                <div class="clr-row clr-align-items-end settings-row" *ngIf="settingsForm.get('search.enableSearchHistory').value">
-                    <div class="clr-col-8">
-                        <clr-input-container class="history-limit-input">
-                            <label>Max history elements</label>
-                            <input id="historyElementCount" clrInput type="number" formControlName="historyElementCount" />
-                            <clr-control-error *ngIf="settingsForm.get('search.historyElementCount').invalid">
-                                Invalid value!
-                            </clr-control-error>
-                        </clr-input-container>
-                    </div>
-                    <div class="clr-col-4">
-                        <button class="btn btn-sm btn-outline btn-clear-history" type="button" (click)="historyStoreService.clear()">
-                            Clear history
-                        </button>
-                    </div>
-                </div>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="enableResultHiding" />
-                    <label>Enable result entries hiding</label>
-                </clr-checkbox-wrapper>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="showFileHitsCount" />
-                    <label>Show file hits count</label>
-                </clr-checkbox-wrapper>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="showTotalHitsCount" />
-                    <label>Show total hits count</label>
-                </clr-checkbox-wrapper>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="includeArchived" />
-                    <label>Include archived projects</label>
-                </clr-checkbox-wrapper>
-                <clr-radio-container clrInline class="setting-row">
-                    <label>Results view</label>
-                    <clr-radio-wrapper>
-                        <input type="radio" clrRadio value="FLAT" formControlName="searchResultsView" />
-                        <label>Flat</label>
-                    </clr-radio-wrapper>
-                    <clr-radio-wrapper>
-                        <input type="radio" clrRadio value="TREE" formControlName="searchResultsView" />
-                        <label>Tree</label>
-                    </clr-radio-wrapper>
-                    <clr-radio-wrapper>
-                        <input type="radio" clrRadio value="COMPACT_TREE" formControlName="searchResultsView" />
-                        <label>Compact tree</label>
-                    </clr-radio-wrapper>
-                </clr-radio-container>
-            </div>
-            <div formGroupName="electron" *ngIf="appRunningInElectron">
-                <div class="setting-section-title">Other</div>
-                <clr-checkbox-wrapper>
-                    <input clrCheckbox type="checkbox" formControlName="enableUnsafeRequests" />
-                    <label>Enable unsafe HTTPS requests</label>
-                </clr-checkbox-wrapper>
-            </div>
+            <clr-tabs>
+                <clr-tab>
+                    <button clrTabLink>Search</button>
+                    <clr-tab-content>
+                        <div formGroupName="search">
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="rememberLastSearch" />
+                                <label>Remember last search</label>
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="enableSearchHistory" />
+                                <label>Enable search history</label>
+                            </clr-checkbox-wrapper>
+                            <div class="clr-row clr-align-items-end settings-row" *ngIf="settingsForm.get('search.enableSearchHistory').value">
+                                <div class="clr-col-8">
+                                    <clr-input-container class="history-limit-input">
+                                        <label>Max history elements</label>
+                                        <input id="historyElementCount" clrInput type="number" formControlName="historyElementCount" />
+                                        <clr-control-error *ngIf="settingsForm.get('search.historyElementCount').invalid">
+                                            Invalid value!
+                                        </clr-control-error>
+                                    </clr-input-container>
+                                </div>
+                                <div class="clr-col-4">
+                                    <button class="btn btn-sm btn-outline btn-clear-history" type="button" (click)="historyStoreService.clear()">
+                                        Clear history
+                                    </button>
+                                </div>
+                            </div>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="enableResultHiding" />
+                                <label>Enable result entries hiding</label>
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="showFileHitsCount" />
+                                <label>Show file hits count</label>
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="showTotalHitsCount" />
+                                <label>Show total hits count</label>
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="includeArchived" />
+                                <label>Include archived projects</label>
+                            </clr-checkbox-wrapper>
+                            <clr-radio-container clrInline class="setting-row">
+                                <label>Results view</label>
+                                <clr-radio-wrapper>
+                                    <input type="radio" clrRadio value="FLAT" formControlName="searchResultsView" />
+                                    <label>Flat</label>
+                                </clr-radio-wrapper>
+                                <clr-radio-wrapper>
+                                    <input type="radio" clrRadio value="TREE" formControlName="searchResultsView" />
+                                    <label>Tree</label>
+                                </clr-radio-wrapper>
+                                <clr-radio-wrapper>
+                                    <input type="radio" clrRadio value="COMPACT_TREE" formControlName="searchResultsView" />
+                                    <label>Compact tree</label>
+                                </clr-radio-wrapper>
+                            </clr-radio-container>
+                        </div>
+                    </clr-tab-content>
+                </clr-tab>
+                <clr-tab>
+                    <button clrTabLink>File viewer</button>
+                    <clr-tab-content>
+                        <div formGroupName="fileViewer">
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="fullScreen" />
+                                <label>Full screen window</label>
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="wrapLines" />
+                                <label>Wrap long lines</label>
+                            </clr-checkbox-wrapper>
+                        </div>
+                    </clr-tab-content>
+                </clr-tab>
+                <clr-tab *ngIf="appRunningInElectron">
+                    <button clrTabLink>Other</button>
+                    <clr-tab-content *clrIfActive>
+                        <div formGroupName="electron" *ngIf="appRunningInElectron">
+                            <clr-checkbox-wrapper>
+                                <input clrCheckbox type="checkbox" formControlName="enableUnsafeRequests" />
+                                <label>Enable unsafe HTTPS requests</label>
+                            </clr-checkbox-wrapper>
+                        </div>
+                    </clr-tab-content>
+                </clr-tab>
+            </clr-tabs>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>

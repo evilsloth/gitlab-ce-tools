@@ -14,7 +14,7 @@
                 <clr-icon shape="cog"></clr-icon>
             </a>
             <clr-dropdown>
-                <button class="nav-icon" clrDropdownTrigger>
+                <button class="nav-icon" clrDropdownTrigger #serversButton>
                     <clr-icon shape="hard-disk"></clr-icon>
                     <clr-icon class="caret-icon" shape="caret down"></clr-icon>
                 </button>
@@ -28,10 +28,12 @@
                            (click)="selectActiveServer(server)">
                             {{ server.name }}
                             <div class="dropdown-buttons">
-                                <button type="button" class="dropdown-icon-button" (click)="openEditServerModal($event, server)">
+                                <button type="button" class="dropdown-icon-button"
+                                        (click)="serversButton.click(); openEditServerModal($event, server)">
                                     <clr-icon shape="pencil"></clr-icon>
                                 </button>
-                                <button type="button" class="dropdown-icon-button" (click)="removeServer($event, server)">
+                                <button type="button" class="dropdown-icon-button"
+                                        (click)="serversButton.click(); removeServer($event, server)">
                                     <clr-icon shape="trash"></clr-icon>
                                 </button>
                             </div>
