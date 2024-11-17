@@ -439,6 +439,9 @@ Apache-2.0
  
 
 
+rxjs-ratelimiter
+ISC
+
 tslib
 0BSD
 Copyright (c) Microsoft Corporation.
