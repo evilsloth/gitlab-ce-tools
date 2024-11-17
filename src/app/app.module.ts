@@ -9,6 +9,7 @@ import { SharedModule } from './shared/shared.module';
 import { HttpErrorInterceptor } from './core/services/http/http-error-interceptor';
 import { SearchModule } from './search/search.module';
 import { SettingsModule } from './settings/settings.module';
+import { RateLimitingHttpInterceptor } from './core/services/http/rate-limiting-http-interceptor';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { SettingsModule } from './settings/settings.module';
         SettingsModule
     ],
     providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: RateLimitingHttpInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]

@@ -18,6 +18,7 @@ export interface SearchSettings {
     showFileHitsCount: boolean;
     showTotalHitsCount: boolean;
     includeArchived: boolean;
+    requestRateLimit: number;
 }
 
 export interface ElectronSettings {
@@ -40,7 +41,8 @@ export function getDefaultSettings(): Settings {
             searchResultsView: 'FLAT',
             showFileHitsCount: true,
             showTotalHitsCount: true,
-            includeArchived: false
+            includeArchived: false,
+            requestRateLimit: 400
         },
         electron: {
             enableUnsafeRequests: false

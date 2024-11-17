@@ -17,7 +17,7 @@
                             </clr-checkbox-wrapper>
                             <div class="clr-row clr-align-items-end settings-row" *ngIf="settingsForm.get('search.enableSearchHistory').value">
                                 <div class="clr-col-8">
-                                    <clr-input-container class="history-limit-input">
+                                    <clr-input-container class="control-no-margin">
                                         <label>Max history elements</label>
                                         <input id="historyElementCount" clrInput type="number" formControlName="historyElementCount" />
                                         <clr-control-error *ngIf="settingsForm.get('search.historyElementCount').invalid">
@@ -26,7 +26,7 @@
                                     </clr-input-container>
                                 </div>
                                 <div class="clr-col-4">
-                                    <button class="btn btn-sm btn-outline btn-clear-history" type="button" (click)="historyStoreService.clear()">
+                                    <button class="btn btn-sm btn-outline control-no-margin" type="button" (click)="historyStoreService.clear()">
                                         Clear history
                                     </button>
                                 </div>
@@ -62,6 +62,13 @@
                                     <label>Compact tree</label>
                                 </clr-radio-wrapper>
                             </clr-radio-container>
+                            <clr-input-container class="control-no-margin">
+                                <label>Request rate limit (req/min)</label>
+                                <input clrInput type="number" formControlName="requestRateLimit" />
+                                <clr-control-error *ngIf="settingsForm.get('search.requestRateLimit').invalid">
+                                    Invalid value!
+                                </clr-control-error>
+                            </clr-input-container>
                         </div>
                     </clr-tab-content>
                 </clr-tab>

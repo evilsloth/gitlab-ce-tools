@@ -28,7 +28,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
             searchResultsView: ['FLAT'],
             showFileHitsCount: [false],
             showTotalHitsCount: [false],
-            includeArchived: [false]
+            includeArchived: [false],
+            requestRateLimit: [400, [Validators.required, Validators.min(0)]]
         }),
         electron: this.formBuilder.group({
             enableUnsafeRequests: [false]
