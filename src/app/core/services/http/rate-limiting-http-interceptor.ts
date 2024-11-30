@@ -7,11 +7,11 @@ import { SettingsService } from '../../../../app/settings/settings.service';
 @Injectable()
 export class RateLimitingHttpInterceptor implements HttpInterceptor {
 
-    private rateLimiter = new RateLimiter(400, 61000);
+    private rateLimiter = new RateLimiter(400, 60000);
 
     constructor(settingsService: SettingsService) {
         settingsService.getSettings().subscribe((settings) => {
-            this.rateLimiter = new RateLimiter(settings.search.requestRateLimit, 61000);
+            this.rateLimiter = new RateLimiter(settings.search.requestRateLimit, 60000);
         });
     }
 

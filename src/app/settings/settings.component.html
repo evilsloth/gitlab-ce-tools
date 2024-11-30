@@ -62,10 +62,31 @@
                                     <label>Compact tree</label>
                                 </clr-radio-wrapper>
                             </clr-radio-container>
-                            <clr-input-container class="control-no-margin">
+                            <clr-input-container>
                                 <label>Request rate limit (req/min)</label>
                                 <input clrInput type="number" formControlName="requestRateLimit" />
                                 <clr-control-error *ngIf="settingsForm.get('search.requestRateLimit').invalid">
+                                    Invalid value!
+                                </clr-control-error>
+                            </clr-input-container>
+                            <clr-input-container>
+                                <label>Concurrent search requests count</label>
+                                <input clrInput type="number" formControlName="concurrentSearchRequests" />
+                                <clr-control-error *ngIf="settingsForm.get('search.concurrentSearchRequests').invalid">
+                                    Invalid value!
+                                </clr-control-error>
+                            </clr-input-container>
+                            <clr-input-container>
+                                <label>Error request retry count</label>
+                                <input clrInput type="number" formControlName="requestRetryCount" />
+                                <clr-control-error *ngIf="settingsForm.get('search.requestRetryCount').invalid">
+                                    Invalid value!
+                                </clr-control-error>
+                            </clr-input-container>
+                            <clr-input-container>
+                                <label>Error request retry delay (seconds)</label>
+                                <input clrInput type="number" formControlName="requestRetryDelay" />
+                                <clr-control-error *ngIf="settingsForm.get('search.requestRetryDelay').invalid">
                                     Invalid value!
                                 </clr-control-error>
                             </clr-input-container>

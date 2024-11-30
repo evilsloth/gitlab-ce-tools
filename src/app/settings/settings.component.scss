@@ -12,6 +12,10 @@ clr-tabs::ng-deep > ul {
     margin-bottom: 4px;
 }
 
-.control-no-margin {
-    margin: 0;
+clr-input-container {
+    margin-top: 8px;
+
+    &.control-no-margin {
+        margin: 0;
+    }
 }

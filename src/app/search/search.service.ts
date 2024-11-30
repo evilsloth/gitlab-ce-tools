@@ -6,6 +6,7 @@ import { ProjectsApiService } from '../core/services/gitlab-api/projects-api.ser
 import { GroupsApiService } from '../core/services/gitlab-api/groups-api.service';
 import { Project } from '../core/services/gitlab-api/models/project';
 import { FileSearchResult } from '../core/services/gitlab-api/models/file-search-result';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,22 +14,30 @@ import { FileSearchResult } from '../core/services/gitlab-api/models/file-search
 export class SearchService {
     private static readonly ALL_GROUPS_SEARCH_ID = '-1';
 
-    constructor(private groupsApiService: GroupsApiService, private projectsApiService: ProjectsApiService) {}
+    constructor(
+        private groupsApiService: GroupsApiService,
+        private projectsApiService: ProjectsApiService,
+        private settingsService: SettingsService
+    ) { }
 
-    searchInGroup(groupId: string|number, includeArchived: boolean, projectNameFilterTerm?: string, searchText?: string,
-                  searchFilename?: string): Observable<ProjectSearchResult> {
+    searchInGroup(groupId: string | number, includeArchived: boolean, projectNameFilterTerm?: string, searchText?: string,
+        searchFilename?: string): Observable<ProjectSearchResult> {
+        const concurrency = this.settingsService.getCurrentSettings().search.concurrentSearchRequests;
         return this.searchProjects(groupId, includeArchived, projectNameFilterTerm)
             .pipe(mergeMap(projects => {
                 const projectsSearch$ = projects.map(project => this.searchInProject(project, searchText, searchFilename));
-                return merge(...projectsSearch$);
+                return merge(...projectsSearch$, concurrency);
             }));
     }
 
     searchInProjects(projects: Array<Project>, searchText?: string, searchFilename?: string): Observable<ProjectSearchResult> {
-        return merge(...projects.map(project => this.searchInProject(project, searchText, searchFilename)));
+        return merge(
+            ...projects.map(project => this.searchInProject(project, searchText, searchFilename)),
+            this.settingsService.getCurrentSettings().search.concurrentSearchRequests
+        );
     }
 
-    private searchProjects(groupId: string|number,  includeArchived: boolean, projectNameFilterTerm?: string) {
+    private searchProjects(groupId: string | number, includeArchived: boolean, projectNameFilterTerm?: string) {
         if (groupId.toString() === SearchService.ALL_GROUPS_SEARCH_ID) {
             return this.projectsApiService.getProjects(includeArchived, projectNameFilterTerm);
         } else {
@@ -49,7 +58,7 @@ export class SearchService {
 
         fileSearchResults.forEach(element => {
             if (!results.has(element.filename)) {
-                results.set(element.filename, [ element ]);
+                results.set(element.filename, [element]);
             } else {
                 results.get(element.filename).push(element);
             }
