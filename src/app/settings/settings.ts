@@ -22,6 +22,7 @@ export interface SearchSettings {
     concurrentSearchRequests: number;
     requestRetryCount: number;
     requestRetryDelay: number;
+    disableRateLimitOnFile: boolean;
 }
 
 export interface ElectronSettings {
@@ -48,7 +49,8 @@ export function getDefaultSettings(): Settings {
             requestRateLimit: 400,
             concurrentSearchRequests: 5,
             requestRetryCount: 10,
-            requestRetryDelay: 10
+            requestRetryDelay: 10,
+            disableRateLimitOnFile: true
         },
         electron: {
             enableUnsafeRequests: false

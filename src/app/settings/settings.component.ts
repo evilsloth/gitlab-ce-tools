@@ -32,7 +32,8 @@ export class SettingsComponent extends Modal<any> implements OnInit, OnDestroy {
             requestRateLimit: [400, [Validators.required, Validators.min(0)]],
             concurrentSearchRequests: [5, [Validators.required, Validators.min(0)]],
             requestRetryCount: [10, [Validators.required, Validators.min(0)]],
-            requestRetryDelay: [10, [Validators.required, Validators.min(0)]]
+            requestRetryDelay: [10, [Validators.required, Validators.min(0)]],
+            disableRateLimitOnFile: [false]
         }),
         electron: this.formBuilder.group({
             enableUnsafeRequests: [false]
