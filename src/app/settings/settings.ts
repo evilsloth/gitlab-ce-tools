@@ -19,10 +19,10 @@ export interface SearchSettings {
     showTotalHitsCount: boolean;
     includeArchived: boolean;
     requestRateLimit: number;
+    disableRateLimitOnFile: boolean;
     concurrentSearchRequests: number;
     requestRetryCount: number;
     requestRetryDelay: number;
-    disableRateLimitOnFile: boolean;
 }
 
 export interface ElectronSettings {
@@ -47,10 +47,10 @@ export function getDefaultSettings(): Settings {
             showTotalHitsCount: true,
             includeArchived: false,
             requestRateLimit: 400,
+            disableRateLimitOnFile: false,
             concurrentSearchRequests: 5,
             requestRetryCount: 10,
-            requestRetryDelay: 10,
-            disableRateLimitOnFile: true
+            requestRetryDelay: 10
         },
         electron: {
             enableUnsafeRequests: false
