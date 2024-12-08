@@ -6,6 +6,7 @@ import { AceComponent, AceConfigInterface } from 'ngx-ace-wrapper';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { SettingsService } from 'src/app/settings/settings.service';
 import { Range } from 'brace';
+import { GitlabWwwService } from 'src/app/core/services/gitlab-web/gitlab-www.service';
 
 import 'brace';
 import 'brace/mode/javascript';
@@ -62,7 +63,8 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     highlightedRanges: Range[] = [];
     jumpedToLineIndex = -1;
 
-    constructor(private filesApiService: FilesApiService, private settingsService: SettingsService) {
+    constructor(private filesApiService: FilesApiService, private settingsService: SettingsService,
+        private gitlabWwwService: GitlabWwwService) {
         super();
     }
 
@@ -105,6 +107,14 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         const maxIndex = this.highlightedRanges.length - 1;
         this.jumpedToLineIndex = this.jumpedToLineIndex < maxIndex ? this.jumpedToLineIndex + 1 : 0;
         this.goToHighlight(this.jumpedToLineIndex);
+    }
+
+    openInWebBrowser() {
+        let line = this.ace.directiveRef.ace().getCursorPosition()?.row;
+        if (line !== undefined || line !== null) {
+            line += 1;
+        }
+        this.gitlabWwwService.openFile(this.project, this.filename, line);
     }
 
     private goToHighlight(index: number): void {

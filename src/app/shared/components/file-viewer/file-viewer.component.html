@@ -1,6 +1,14 @@
 <clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="close()" [clrModalSize]="'xl'" [clrModalStaticBackdrop]="false">
     <h3 class="modal-title">
         <app-path-text [path]="filename"></app-path-text>
+        <div class="file-viewer-menu">
+            <div class="btn-group btn-outline-primary btn-icon btn-sm">
+                <button class="btn" (click)="openInWebBrowser()">
+                    <clr-icon shape="pop-out"></clr-icon>
+                    <span class="clr-icon-title">Open in Web Browser</span>
+                </button>
+            </div>
+        </div>
         <div class="jump-lines-icons" *ngIf="highlightedRanges.length > 0">
             <span class="jump-counter">{{jumpedToLineIndex + 1}} of {{highlightedRanges.length}}</span>
             <div class="btn-group btn-outline-primary btn-icon btn-sm">

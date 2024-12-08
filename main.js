@@ -44,6 +44,14 @@ app.on('activate', () => {
     }
 });
 
+// allow open external links in webview (electron-tabs) context
+app.on('web-contents-created', (_, webContents) => {
+    webContents.setWindowOpenHandler(({url}) => {
+        shell.openExternal(url);
+        return {action : "deny"};
+    });
+});
+
 ipcMain.on('SETTINGS_CHANGED', (event, electronSettings) => {
     const unsafeRequestsEnabled = store.get('enableUnsafeRequests');
     if (electronSettings && electronSettings.enableUnsafeRequests !== unsafeRequestsEnabled) {
