@@ -18,7 +18,8 @@
     active: true,
     webviewAttributes: {
         nodeintegration: true,
-        webPreferences: 'contextIsolation=false'
+        webPreferences: 'contextIsolation=false',
+        allowpopups: true,
     },
     ready: (tab) => {
         tab.webview.addEventListener('ipc-message', (event) => {

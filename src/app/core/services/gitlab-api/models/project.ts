@@ -6,4 +6,5 @@ export interface Project {
     name: string;
     name_with_namespace: string;
     path_with_namespace: string;
+    web_url: string;
 }
