@@ -3,10 +3,10 @@
         <app-path-text [path]="filename"></app-path-text>
         <div class="file-viewer-menu">
             <div class="btn-group btn-outline-primary btn-icon btn-sm">
-                <button class="btn" (click)="openInWebBrowser()">
+                <a target="_blank" rel="noopener noreferrer" [href]="openGitLabUrl()" class="btn">
+                    GitLab
                     <clr-icon shape="pop-out"></clr-icon>
-                    <span class="clr-icon-title">Open in Web Browser</span>
-                </button>
+                </a>
             </div>
         </div>
         <div class="jump-lines-icons" *ngIf="highlightedRanges.length > 0">

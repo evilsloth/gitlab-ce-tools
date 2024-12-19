@@ -6,7 +6,7 @@ import { AceComponent, AceConfigInterface } from 'ngx-ace-wrapper';
 import { Project } from 'src/app/core/services/gitlab-api/models/project';
 import { SettingsService } from 'src/app/settings/settings.service';
 import { Range } from 'brace';
-import { GitlabWwwService } from 'src/app/core/services/gitlab-web/gitlab-www.service';
+import { GitlabWwwService } from 'src/app/core/services/gitlab-api/gitlab-www.service';
 
 import 'brace';
 import 'brace/mode/javascript';
@@ -51,6 +51,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
     @ViewChild('ace', { static: true })
     ace: AceComponent;
     aceConfig: AceConfigInterface;
+    aceInitialized = false;
 
     project: Project;
     filename: string;
@@ -109,12 +110,9 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
         this.goToHighlight(this.jumpedToLineIndex);
     }
 
-    openInWebBrowser() {
-        let line = this.ace.directiveRef.ace().getCursorPosition()?.row;
-        if (line !== undefined || line !== null) {
-            line += 1;
-        }
-        this.gitlabWwwService.openFile(this.project, this.filename, line);
+    openGitLabUrl(): string {
+        const {row} = this.provideCursorPosition();
+        return this.gitlabWwwService.openFileUrl(this.project, this.filename, row);
     }
 
     private goToHighlight(index: number): void {
@@ -141,6 +139,7 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
             if (this.highlightedRanges.length > 0) {
                 this.goToNextHighlight();
             }
+            this.aceInitialized = true;
         });
     }
 
@@ -151,5 +150,9 @@ export class FileViewerComponent extends Modal<FileViewerInitData> implements On
 
     private decodeContent(content: string): string {
         return decodeURIComponent(escape(atob(content)));
+    }
+
+    private provideCursorPosition(): {row?: number; column?: number} {
+        return this.aceInitialized ? this.ace.directiveRef.ace().getCursorPosition() : {};
     }
 }
